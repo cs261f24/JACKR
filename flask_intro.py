@@ -9,9 +9,8 @@ import os
 import sqlite3
 from flask import Flask, g, render_template
 from flask import request, redirect, url_for, flash, session # Used for login functionality
-from werkzeug.security import generate_password_hash
 import click
-
+from test_db import connect_db # importing the database data insertion into flask
 
 
 
@@ -29,7 +28,7 @@ DB_PATH = 'db.sqlite3'
 
 
 # We will delete out this database once the SQL files are ready
-dbUser_PW = {'Jack': 'Password123'}
+# dbUser_PW = {'Jack': 'Password123'}
 
 
 def get_db():
@@ -119,26 +118,21 @@ app.cli.add_command(init_db_command)
 
 
 
-def get_items():
+def get_logininfo():
     """
-    Returns a list of items sorted by name.
+    Fetches login information from the users table.
     """
-
 
     conn = get_db()
     cur = conn.cursor()
 
-
     query = '''
-SELECT name, quantity
-FROM item
-ORDER BY name'''
-
+    SELECT username, password
+    FROM users
+    ORDER BY username
+    '''
 
     cur.execute(query)
-
-
-    # fetchall() gets all the rows as a list
     return cur.fetchall()
 
 
@@ -176,18 +170,18 @@ def login():
         cur = conn.cursor()
 
 
-        query = 'SELECT * FROM faculty WHERE username = ?'
+        query = 'SELECT * FROM users WHERE username = ?'
         cur.execute(query, (username,))
         user = cur.fetchone()
 
 
-        if username not in dbUser_PW:
-            return render_template('items.html', info='Invalid User')
-        else:
-            if dbUser_PW[username] != password:
-                return render_template('items.html', info="Invalid Password")
-            else:
-                return render_template("login.html", name = username)
+        if user is None:
+            return render_template('index.html', info='Invalid User')
+        elif user['password'] != password:
+            return render_template('index.html', info="Invalid Password")
+        else:        
+            session['username'] = username  # Store the username in the session
+            return render_template("login.html", name=username)
            
 @app.route('/')
 def items():
@@ -199,10 +193,13 @@ def items():
     """
 
 
-    return render_template('items.html', items=get_items())
+    return render_template('index.html', items=get_logininfo())
 
 
 @app.route('/logout')
 def logout():
     session.pop('username', None)
     return redirect(url_for('login'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
