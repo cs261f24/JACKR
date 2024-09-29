@@ -176,12 +176,12 @@ def login():
 
 
         if user is None:
-            return render_template('index.html', info='Invalid User')
+            return render_template('loginPage.html', info='Invalid User')
         elif user['password'] != password:
-            return render_template('index.html', info="Invalid Password")
+            return render_template('loginPage.html', info="Invalid Password")
         else:        
             session['username'] = username  # Store the username in the session
-            return render_template("login.html", name=username)
+            return render_template("FacultyEventPage.html", name=username)
            
 @app.route('/')
 def items():
@@ -193,7 +193,7 @@ def items():
     """
 
 
-    return render_template('index.html', items=get_logininfo())
+    return render_template('loginPage.html', items=get_logininfo())
 
 
 @app.route('/logout')
