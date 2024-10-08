@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Event Management System</title>
+    <title>CS Department</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         body{
@@ -13,7 +13,7 @@
 </head>
 <body>
     <header>
-        <h1>Event Management System</h1>
+        <h1>CS Department </h1>
         <nav>
             <ul>
             </ul>
@@ -22,7 +22,13 @@
 
     <main>
         <section id="login">
-            <h2>Faculty Login</h2>
+            <h2>Login Page</h2>
+
+            <select>
+                <option value="">I am Faculty</option>
+                <option value="" selected>I am a Student</option>
+            </select>
+            <h3></h3>
             <form action="/login" method="POST">
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
