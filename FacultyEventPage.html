@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>CS Department Event Page &mdash; </title>
+		<style type="text/css">
+			body {
+				margin:0;
+				padding:0;
+				font-family: Sans-Serif;
+				line-height: 1.5em;
+                background: #eec2d7af;
+			}
+			
+			header { 
+				background: #ec8aa1af;
+				height: 100px;
+			}
+			
+			header h1 {
+				margin: 0;
+				padding-top: 15px;
+			}
+			
+			main {
+				padding-bottom: 10010px;
+				margin-bottom: -10000px;
+				float: left;
+				width: 100%;
+			}
+			
+			nav {
+				padding-bottom: 10450px;
+				margin-bottom: -10000px;
+				float: left;
+				width: 200px;
+				margin-left: -200px;
+				background: #ec7794;
+			}	
+	
+			#wrapper {
+				overflow: hidden;
+			}
+						
+			#content {
+				margin-right: 230px; /* Same as 'nav' width */
+			}
+			
+			.innertube {
+				margin: 15px; /* Padding for content */
+				margin-top: 0;
+			}
+
+            #calendar{
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                overflow: hidden;
+                width: 300px;
+                margin: 0 auto;
+            }
+            
+		
+            #header {
+            background: #f0b5ba;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .day {
+            display: inline-block;
+            width: 12%;
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .day:hover {
+            background: #e0e0e0;
+        }
+
+        .empty {
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>      
+
+<header>
+    <div class="innertube">
+        <h1 align="center">CS Department Event Page</h1>
+    </div>
+</header>
+
+<header>
+    <form action="/logout">
+
+        <button type="submit">Logout</button>
+    </form>
+</header>
+
+<div id="wrapper">
+    <main>
+        <div id="content">
+            <div class="innertube">
+                <h1>Event Input Calendar</h1>
+                <div id="calendar">
+                    <div id="header">
+                        <span id="prev" style="cursor: pointer;">&#10094;</span>
+                        <span id="monthYear"></span>
+                        <span id="next" style="cursor: pointer;">&#10095;</span>
+                    </div>
+                    <div id="daysOfWeek">
+                        <div class="day">Sun</div>
+                        <div class="day">Mon</div>
+                        <div class="day">Tue</div>
+                        <div class="day">Wed</div>
+                        <div class="day">Thu</div>
+                        <div class="day">Fri</div>
+                        <div class="day">Sat</div>
+                    </div>
+                    <div id="days"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+        
+    <nav>
+        <div class="innertube">
+            <h3 align="center">Tabs</h3>
+            <ul>
+               <li><a href="#">My Students</a></li>
+                <li><a href="#">Print Report</a></li>
+                <li><a href="#">Link 3</a></li>
+                <li><a href="#">Link 4</a></li>
+                <li><a href="#">Link 5</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+        
+
+
+<script>
+    const calendar = document.getElementById('calendar');
+    const monthYear = document.getElementById('monthYear');
+    const days = document.getElementById('days');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+
+    let currentDate = new Date();
+
+    function renderCalendar() {
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+
+        // Clear previous days
+        days.innerHTML = '';
+
+        // Set month and year in the header
+        monthYear.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+
+        // Get the first day of the month
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        // Add empty divs for days before the first day of the month
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.classList.add('day', 'empty');
+            days.appendChild(emptyDiv);
+        }
+
+        // Add days of the month
+        for (let date = 1; date <= lastDate; date++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.classList.add('day');
+            dayDiv.innerText = date;
+            dayDiv.onclick = () => alert(`You clicked on: ${month + 1}/${date}/${year}`);
+            days.appendChild(dayDiv);
+        }
+    }
+
+    prev.onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    };
+
+    next.onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    };
+
+    // Initial render
+    renderCalendar();
+</script>
+
+</body>
+</html>
+
