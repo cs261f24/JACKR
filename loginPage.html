@@ -24,12 +24,14 @@
         <section id="login">
             <h2>Login Page</h2>
 
-            <select>
-                <option value="">I am Faculty</option>
-                <option value="" selected>I am a Student</option>
-            </select>
             <h3></h3>
             <form action="/login" method="POST">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                <option value="">I am Faculty</option>
+                <option value="" selected>I am a Student</option>  
+                </select>
+
                 <label for="username">Username:</label>
                 <input type="text" id="username" name="username" required>
                 <label for="password">Password:</label>
