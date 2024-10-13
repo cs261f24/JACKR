@@ -14,21 +14,20 @@ from test_db import connect_db # importing the database data insertion into flas
 
 
 
+
 # There are better ways to do this, see the Flask tutorial
 app = Flask(__name__)
-
 
 
 
 app.secret_key = 'my-super-secret-key'
 
 
+
 # Name of the SQLite database file that will be created
 DB_PATH = 'db.sqlite3'
 
 
-# We will delete out this database once the SQL files are ready
-# dbUser_PW = {'Jack': 'Password123'}
 
 
 def get_db():
@@ -36,7 +35,6 @@ def get_db():
     Returns a database connection. If a connection has already been created,
     the existing connection is used, otherwise it creates a new connection.
     """
-
 
     # The Flask g object can be used to manage global application-level
     # data. Here we use it to store a database connection object so that we
@@ -58,6 +56,7 @@ def get_db():
 
 
 
+
 def close_db(e=None):
     """
     Close the database connection if it was opened.
@@ -67,12 +66,9 @@ def close_db(e=None):
     db = g.pop('sqlite_db', None)
 
 
+
     if db is not None:
         db.close()
-
-
-
-
 
 
 
@@ -84,17 +80,18 @@ def init_db():
     """
 
 
+
     db = get_db()
+
 
 
     with app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
 
+
     with app.open_resource('populate_table.sql') as f:
         db.executescript(f.read().decode('utf8'))
-
-
 
 
 @click.command('init-db')
@@ -109,12 +106,10 @@ def init_db_command():
 
 
 
-
 # Close the DB when the app shuts down and register the init-db command
 # There are better ways to do this, see the Flask tutorial
 app.teardown_appcontext(close_db)
 app.cli.add_command(init_db_command)
-
 
 
 
@@ -136,8 +131,6 @@ def get_logininfo():
     return cur.fetchall()
 
 
-
-
 def get_events():
     """
     Returns a list of upcoming events.
@@ -145,17 +138,13 @@ def get_events():
     conn = get_db()
     cur = conn.cursor()
 
-
     query = '''
     SELECT name, date, location, description
     FROM events
     ORDER BY date'''
 
-
     cur.execute(query)
     return cur.fetchall()
-
-
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -163,25 +152,38 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        role = request.form['role']  # Get the selected role
 
-
-        # Here, you'd fetch the user from the database and validate the password
         conn = get_db()
         cur = conn.cursor()
 
-
-        query = 'SELECT * FROM users WHERE username = ?'
-        cur.execute(query, (username,))
+        # Fetch the user from the database based on username and role
+        query = 'SELECT * FROM users WHERE username = ? AND role = ?'
+        cur.execute(query, (username, role))
         user = cur.fetchone()
 
 
-        if user is None:
-            return render_template('loginPage.html', info='Invalid User')
-        elif user['password'] != password:
-            return render_template('loginPage.html', info="Invalid Password")
-        else:        
-            session['username'] = username  # Store the username in the session
+
+
+       
+        session['username'] = username
+        session['role'] = role  # Store the role in the session
+           
+        if role == 'admin':
+            if user is None:
+                return render_template('loginPage.html', info='Invalid Username')
+            elif user['password'] != password:
+                return render_template('loginPage.html', info="Invalid Password")
             return render_template("FacultyEventPage.html", name=username)
+
+
+        elif role == 'student':
+            if user is None:
+                return render_template('loginPage.html', info='Invalid Username')
+            elif user['password'] != password:
+                return render_template('loginPage.html', info="Invalid Password")
+            return render_template("StudentView.html", name=username)
+    return render_template('loginPage.html')
            
 @app.route('/')
 def items():
@@ -193,13 +195,50 @@ def items():
     """
 
 
-    return render_template('loginPage.html', items=get_logininfo())
+    return render_template('StartPage.html', items=get_logininfo())
+
+# Sign-up route to register new users
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        # Fetching form data
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        role = request.form['role']
+
+        # Connect to the database
+        conn = connect_db('db.sqlite3')
+        cursor = conn.cursor()
+
+        try:
+            # Insert the new user data into the 'users' table
+            cursor.execute(
+                'INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)',
+                (username, password, email, role)
+            )
+            conn.commit()  # Save the changes to the database
+
+        finally:
+            # Close the database connection
+            conn.close()
+
+        # Redirect the user to the start page after successful sign-up
+        return render_template('StartPage.html')
+    # Render the sign-up form if the request method is GET
+    return render_template('signupPage.html')
+
+
 
 
 @app.route('/logout')
 def logout():
-    session.pop('username', None)
-    return redirect(url_for('login'))
+    
+    return render_template("StartPage.html")
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
+
