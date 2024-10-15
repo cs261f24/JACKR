@@ -26,7 +26,7 @@ VALUES (1, 1, '2024-10-10'),
        (1, 5, '2024-10-11');
 
 -- populates the other_departments table with Name, description, and head of dept in the database
-INSERT INTO other_departments (name, description, head)
+/*INSERT INTO other_departments (name, description, head)
 VALUES ('Philosophy', 'Philosophy Department focuses on philosophy', 'Richard Polt'),
        ('English', 'English page focuses on English', 'Lara Dorger'),
        ('Biology', 'Biology page focuses on Biology', 'Mike Gehner'),
