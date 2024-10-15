@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Department</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body{
+        background: #d3efc6 
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CS Department </h1>
+        <nav>
+            <ul>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="signup">
+            <h2>Signup Page</h2>
+            <h3></h3>
+            <form action="/signup" method="POST">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                <option value="student">Student</option>
+                <option value="admin">Faculty</option>
+                </select>
+                <header>
+                    <h4></h4>
+                <label for="Email">Email:</label>
+                <input type="text" id="Email" name="Email" required>
+                <header>
+                    <h6></h6>
+                </header>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <header>
+                    <h5></h5>
+
+                <button type="submit">Signup</button>
+            </form>
+    </main>
+
+</body>
+</html>
