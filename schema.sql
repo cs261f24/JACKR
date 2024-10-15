@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS attendance;
 DROP TABLE IF EXISTS admin_actions;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS other_departments;
-
+/*DROP TABLE IF EXISTS other_departments;
+*/
 
 /* Users Table: Stores information about students and admins
 * id: Unique identifier for each user
@@ -52,7 +52,7 @@ CREATE TABLE attendance (
 * description: A brief description of what the department focuses on
 * head: The head of the department
 */
-CREATE TABLE other_departments (
+/*CREATE TABLE other_departments (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT UNIQUE NOT NULL,
     description TEXT,
