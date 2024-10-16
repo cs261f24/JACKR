@@ -7,6 +7,11 @@ import pytest
 import time
 from test_db import connect_db  # From your test_tb.py
 
+#to run these tests first start your virtual enviroment 
+#install selenium and pytest in your virtual enviroment created for this project 
+#pip install selenium pytest 
+#start flask by typing flask --app flask_intro run --debug
+#then pytest test_signup_login.py will start the tests
 
 @pytest.fixture(scope="module")
 def setup():
