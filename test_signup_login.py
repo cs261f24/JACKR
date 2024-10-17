@@ -31,7 +31,7 @@ def test_student_signup(setup):
     driver.get("http://localhost:5000")
     
     # Wait for the start page to load
-    time.sleep(2)
+    time.sleep(3)
     
     # Click the "SignUp" button on the start page using the button's form action
     driver.find_element(By.XPATH, "//form[@action='/signup']/button").click()
@@ -42,6 +42,9 @@ def test_student_signup(setup):
     # Select 'Student' role
     role_dropdown = Select(driver.find_element(By.ID, "role"))
     role_dropdown.select_by_value("student")
+
+    time.sleep(1)
+
 
     # Fill out signup form
     driver.find_element(By.ID, "email").send_keys("student1@example.com")
@@ -80,6 +83,7 @@ def test_student_login(setup):
     # Select 'Student' role
     role_dropdown = Select(driver.find_element(By.ID, "role"))
     role_dropdown.select_by_value("student")
+    time.sleep(1)
 
     # Fill out login form
     driver.find_element(By.ID, "username").send_keys("student1")
@@ -114,6 +118,7 @@ def test_faculty_signup(setup):
     # Select 'Faculty' role (the value is 'admin' in the HTML)
     role_dropdown = Select(driver.find_element(By.ID, "role"))
     role_dropdown.select_by_value("admin")  # Correct value for faculty is 'admin'
+    time.sleep(1)
 
     # Fill out signup form
     driver.find_element(By.ID, "email").send_keys("faculty1@example.com")
@@ -152,6 +157,7 @@ def test_faculty_login(setup):
     # Select 'Faculty' role (the value is 'admin' in the HTML)
     role_dropdown = Select(driver.find_element(By.ID, "role"))
     role_dropdown.select_by_value("admin")  # Correct value for faculty is 'admin'
+    time.sleep(1)
 
     # Fill out login form
     driver.find_element(By.ID, "username").send_keys("faculty1")
