@@ -55,7 +55,7 @@
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 overflow: hidden;
-                width: 300px;
+                width: 350px;
                 margin: 0 auto;
             }
             
@@ -67,9 +67,25 @@
             padding: 10px;
         }
 
-        .day {
-            display: inline-block;
-            width: 12%;
+        #daysOfWeek {
+            display: flex;  /* Makes days of the week appear in a row */
+            justify-content: space-between; /* Optional: Adds even spacing */
+        }
+
+        #daysOfWeek .day {
+            flex: 1;  /* Ensure that each day of the week takes equal space */
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        #days {
+            display: flex;
+            flex-wrap: wrap; /* Ensures days wrap onto new rows for the calendar */
+        }
+
+        #days .day {
+            flex: 1 0 14.28%; /* Distribute 7 days per row for the dates */
             padding: 10px;
             box-sizing: border-box;
             text-align: center;
@@ -90,21 +106,19 @@
 <header>
     <div class="innertube">
         <h1 align="center">CS Department Event Page: Student</h1>
+        <form action="/logout"align="right">
+            <h2></h2>
+            <button type="submit">Logout</button>
     </div>
 </header>
 
-<header>
-    <form action="/logout">
-
-        <button type="submit">Logout</button>
-    </form>
-</header>
 
 <div id="wrapper">
     <main>
         <div id="content">
             <div class="innertube">
-                <h1>Event Calendar</h1>
+                <h1>Hello {{info}}</h1>
+                <h2>Event Calendar</h2>
                 <div id="calendar">
                     <div id="header">
                         <span id="prev" style="cursor: pointer;">&#10094;</span>
@@ -130,11 +144,8 @@
         <div class="innertube">
             <h3 align="center">Tabs</h3>
             <ul>
-               <li><a href="#">My Students</a></li>
-                <li><a href="#">Print Report</a></li>
-                <li><a href="#">Link 3</a></li>
-                <li><a href="#">Link 4</a></li>
-                <li><a href="#">Link 5</a></li>
+               <li><a href="#">My Activities</a></li>
+                <li><a href="#">Print My Report</a></li>
             </ul>
         </div>
     </nav>
@@ -180,6 +191,13 @@
             dayDiv.onclick = () => alert(`You clicked on: ${month + 1}/${date}/${year}`);
             days.appendChild(dayDiv);
         }
+
+        const lastDay = new Date(year, month, lastDate).getDay();
+            for (let i = lastDay + 1; i < 7; i++) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.classList.add('day', 'empty');
+                days.appendChild(emptyDiv);
+            }
     }
 
     prev.onclick = () => {

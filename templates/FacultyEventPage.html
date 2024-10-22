@@ -219,6 +219,7 @@
             days.appendChild(dayDiv);
         }
 
+        //add empty divs for days after the last day of the month
         const lastDay = new Date(year, month, lastDate).getDay();
             for (let i = lastDay + 1; i < 7; i++) {
                 const emptyDiv = document.createElement('div');
