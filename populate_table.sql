@@ -1,12 +1,12 @@
 
 
 -- populates the users table (handles both students and admins)
-INSERT INTO users (username, password, email, role)
-VALUES ('Carter', 'ab213', 'carter@example.com', 'student'),
-       ('Nathan', 'ab123', 'nathan@example.com', 'admin'),
-       ('Rachel', 'abc12', 'Rachel@example.com', 'student'),
-       ('Liz', 'abc13', 'Liz@example.com', 'admin'),
-       ('Katelyn', 'abc14', 'Katelyn@example.com', 'student');
+INSERT INTO users (firstName, lastName, password, email, role)
+VALUES ('Carter', 'Smart', 'ab213', 'carter@example.com', 'student'),
+       ('Nathan', 'Taco', 'ab123', 'nathan@example.com', 'admin'),
+       ('Rachel', 'Hamilton', 'abc12', 'Rachel@example.com', 'student'),
+       ('Liz', 'Honey', 'abc13', 'Liz@example.com', 'admin'),
+       ('Katelyn', 'Hoeting', 'abc14', 'Katelyn@example.com', 'student');
 
 
 -- populates the events table (stores details of the events students can attend)

@@ -123,61 +123,93 @@ def get_logininfo():
     cur = conn.cursor()
 
     query = '''
-    SELECT username, password
+    SELECT firstName, lastName, password
     FROM users
-    ORDER BY username
+    ORDER BY firstName, lastName
     '''
 
     cur.execute(query)
     return cur.fetchall()
 
-
-def get_events():
+@app.route('/add_event', methods=['GET', 'POST'])
+def add_events():
     """
-    Returns a list of upcoming events.
+    Handles adding a new event to the events table.
     """
-    conn = get_db()
-    cur = conn.cursor()
+    if request.method == 'POST':
+        # Retrieve form data
+        event_name = request.form['event_name']
+        event_date = request.form['event_date']
+        event_location = request.form['event_location']
+        event_description = request.form['event_description']
 
-    query = '''
-    SELECT name, date, location, description
-    FROM events
-    ORDER BY date'''
+        conn = get_db()  # Get database connection
+        cur = conn.cursor()
 
-    cur.execute(query)
-    return cur.fetchall()
+        # Insert the new event into the database
+        try:
+            cur.execute(
+                'INSERT INTO events (name, date, location, description) VALUES (?, ?, ?, ?)',
+                (event_name, event_date, event_location, event_description)
+            )
+            conn.commit()  # Save the changes
+            info_message = "Event added successfully!"
+        except sqlite3.IntegrityError:
+            info_message = "This event already exists."
+        finally:
+            conn.close()  # Close the connection
+
+        # Redirect to the FacultyEventPage with a success message
+        return render_template('FacultyEventPage.html', info=info_message)
+
+    # Render the FacultyEventPage if it's a GET request
+    return render_template('FacultyEventPage.html')
+
+@app.route('/student_view', methods=['GET'])
+def student_view():
+    conn = get_db()  # Ensure a fresh connection
+    cursor = conn.cursor()
+    cursor.execute("SELECT name, date, description, location FROM events ORDER BY date")
+    event = cursor.fetchall()  # Fetch latest data
+    conn.close()
+    
+    return render_template('StudentView.html', event=event)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-   if request.method == 'POST':
-       username = request.form['username']
-       password = request.form['password']
-       role = request.form['role']
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
 
-       conn = get_db()
-       cur = conn.cursor()
+        conn = get_db()
+        cur = conn.cursor()
 
-       # Fetch the user from the database
-       query = 'SELECT * FROM users WHERE username = ? AND role = ?'
-       cur.execute(query, (username, role))
-       user = cur.fetchone()
+        cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
+        event = cur.fetchall()
 
-       conn.close()
+        # Fetch the user from the database
+        userquery = 'SELECT * FROM users WHERE email = ?'
+        cur.execute(userquery, (email,))
+        user = cur.fetchone()
 
-       if user and check_password_hash(user['password'], password):
-           session['username'] = username
-           session['role'] = role
+        conn.close()
 
-           if role == 'admin':
-               return render_template("FacultyEventPage.html", name = username)
-           else:
-               return render_template("StudentView.html", name=username)
-       else:
-           flash('Invalid username, password, or role.', 'error')
-           return render_template('loginPage.html')
+        # Check if the user exists and the password matches
+        if user and check_password_hash(user['password'], password):
+            session['email'] = email
+            firstName = user['firstName']
 
-   return render_template('loginPage.html')
+            # Check the user's role
+            role = user['role']
+            if role == 'admin':
+                return render_template("FacultyEventPage.html")  # Redirect to admin view
+            else:
+                return render_template("StudentView.html", info = firstName, event=event)  # Redirect to student view
+        else:
+            flash('Invalid email or password', 'error')
+            return render_template('loginPage.html')
+    return render_template('loginPage.html')
            
 @app.route('/')
 def items():
@@ -196,7 +228,8 @@ def items():
 def signup():
     if request.method == 'POST':
         # Fetching form data
-        username = request.form['username']
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
         password = request.form['password']
         email = request.form['email']
         role = request.form['role']
@@ -212,12 +245,12 @@ def signup():
         try:
             # Insert the new user data into the 'users' table
             cursor.execute(
-                'INSERT INTO users (username, password, email, role) VALUES (?, ?, ?, ?)',
-                (username, hashed_password, email, role)
+                'INSERT INTO users (firstName, lastName, password, email, role) VALUES (?, ?, ?, ?, ?)',
+                (firstName, lastName, hashed_password, email, role)
             )
             conn.commit()  # Save the changes to the database
         except sqlite3.IntegrityError:
-            return render_template('signupPage.html', info = "This username already exists.")
+            return render_template('signupPage.html', info = "This email already exists.")
         finally:
             # Close the database connection
             conn.close()
@@ -228,12 +261,35 @@ def signup():
     return render_template('signupPage.html')
 
 
+@app.route("/faculty")
+def back_to_faculty():
+    return render_template("FacultyEventPage.html")
 
+@app.route("/student_dashboard")
+def back_to_student():
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
+    event = cur.fetchall()
+    conn.close()
+    return render_template("StudentView.html", event = event)
+
+@app.route("/my_activities")
+def my_activities():
+    return render_template("MyActivities.html")
 
 @app.route('/logout')
 def logout():
     
     return render_template("StartPage.html")
+
+@app.route('/my_students')
+def my_students():
+    return render_template('MyStudents.html')
+
+@app.route('/print_report')
+def print_report():
+        return render_template('PrintReport.html')
 
 
 
