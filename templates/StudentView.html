@@ -9,11 +9,11 @@
 				padding:0;
 				font-family: Sans-Serif;
 				line-height: 1.5em;
-                background: #ecace6af;
+                background: #f5f6f7e2;
 			}
 			
 			header { 
-				background: #e998d7af;
+				background: #0c2340e2;
 				height: 100px;
 			}
 			
@@ -35,7 +35,7 @@
 				float: left;
 				width: 200px;
 				margin-left: -200px;
-				background: #ea9ef3;
+				background: #2d62a3;
 			}	
 	
 			#wrapper {
@@ -61,7 +61,7 @@
             
 		
             #header {
-            background: #ec7af0;
+            background: #0c2340e2;
             color: white;
             text-align: center;
             padding: 10px;
@@ -144,12 +144,28 @@
         <div class="innertube">
             <h3 align="center">Tabs</h3>
             <ul>
-               <li><a href="#">My Activities</a></li>
+               <li><a href="/my_activities">My Activities</a></li>
                 <li><a href="#">Print My Report</a></li>
             </ul>
         </div>
     </nav>
 </div>
+
+<h1>Upcoming Events</h1>
+{% if event %}
+    <ul>
+        {% for e in event %}
+            <li>
+                <h2>{{ e[0] }}</h2>
+                <p><strong>Description:</strong> {{ e[2] }}</p>
+                <p><strong>Date:</strong> {{ e[1] }}</p>
+                <p><strong>Location:</strong> {{ e[3] }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No upcoming events found.</p>
+{% endif %}
         
 
 
