@@ -2,10 +2,11 @@
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+from selenium.webdriver.support.ui import Select, WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC  # this is for explicit waits
 import pytest
 import time
-from test_db import connect_db  # From your test_tb.py
+from test_db import connect_db  # From your test_db.py
 
 #to run these tests first start your virtual enviroment 
 #install selenium and pytest in your virtual enviroment created for this project 
@@ -168,7 +169,10 @@ def test_add_event(setup):
     # Fill out the event form
     driver.find_element(By.ID, "event_name").send_keys("Sample Event")
     time.sleep(2)
-    driver.find_element(By.ID, "event_date").send_keys("2024-11-15")  # Format as YYYY-MM-DD
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.ID, "event_date"))
+    )
+    driver.execute_script("document.getElementById('event_date').value = '2024-11-15';") 
     time.sleep(2)
     driver.find_element(By.ID, "event_description").send_keys("This is a description for a sample event.")
     time.sleep(2)
