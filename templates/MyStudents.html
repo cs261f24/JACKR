@@ -3,96 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Students</title>
+    <title>CS Department</title>
+    <link rel="stylesheet" href="styles.css">
     <style>
-        body {
-            background: #eef5ff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            color: #444;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-
-        th, td {
-            padding: 10px;
-            text-align: center;
-        }
-
-        th {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #2196F3;
-            color: white;
-            text-align: center;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-
-        .button:hover {
-            background-color: #0b7dda;
-        }
+        body{
+        background: #ffffff
+    }
     </style>
 </head>
 <body>
+    <header>
+        <h1>CS Department </h1>
+        <nav>
+            <ul>
+            </ul>
+        </nav>
+    </header>
 
-<div class="container">
-    <h1>My Students</h1>
+    <main>
+        <section id="signup">
+            <h2>Signup Page</h2>
+            <h3></h3>
+            <form action="/signup" method="POST">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                <option value="student">Student</option>
+                <option value="admin">Faculty</option>
+                </select>
+                <header>
+                    <h4></h4>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email" required>
+                <header>
+                    <h6></h6>
+                </header>
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" required>
+                
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" required>
+                <header>
+                    <h6></h6>
+                </header>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <header>
+                    <h5></h5>
 
-    <table>
-        <tr>
-            <th>Student Name</th>
-            <th>Student ID</th>
-            <th>Attendance</th>
-        </tr>
-        <tr>
-            <td>John Doe</td>
-            <td>12345</td>
-            <td>95%</td>
-        </tr>
-        <tr>
-            <td>Jane Smith</td>
-            <td>67890</td>
-            <td>89%</td>
-        </tr>
-        <tr>
-            <td>Emily Davis</td>
-            <td>54321</td>
-            <td>92%</td>
-        </tr>
-        <!-- Add more students as needed -->
-    </table>
-
-    <a href="/faculty" class="button">Back to Faculty Page</a>
-</div>
+                <button type="submit">Signup</button>
+            </form>
+    </main>
 
 </body>
 </html>
