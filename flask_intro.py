@@ -165,16 +165,6 @@ def add_events():
     # Render the FacultyEventPage if it's a GET request
     return render_template('FacultyEventPage.html')
 
-@app.route('/student_view', methods=['GET'])
-def student_view():
-    conn = get_db()  # Ensure a fresh connection
-    cursor = conn.cursor()
-    cursor.execute("SELECT name, date, description, location FROM events ORDER BY date")
-    event = cursor.fetchall()  # Fetch latest data
-    conn.close()
-    
-    return render_template('StudentView.html', event=event)
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -205,7 +195,7 @@ def login():
             if role == 'admin':
                 return render_template("FacultyEventPage.html")  # Redirect to admin view
             else:
-                return render_template("StudentView.html", info = firstName, event=event)  # Redirect to student view
+                return render_template("StudentView.html", info = "Hello " + firstName + "!")  # Redirect to student view
         else:
             flash('Invalid email or password', 'error')
             return render_template('loginPage.html')
@@ -222,6 +212,25 @@ def items():
 
 
     return render_template('StartPage.html', items=get_logininfo())
+
+@app.route('/studentview')
+def student_view():
+    # Retrieve the selected date from the query parameter
+    selected_date = request.args.get('date')
+    
+    # Connect to the database and query events for the selected date
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+    
+    events = []
+    if selected_date:
+        cursor.execute("SELECT name, date, description, location FROM events WHERE date = ?", (selected_date,))
+        events = cursor.fetchall()
+    
+    conn.close()
+    
+    # Render `studentview.html`, passing the events for the selected date
+    return render_template('studentview.html', events=events)
 
 # Sign-up route to register new users
 @app.route('/signup', methods=['GET', 'POST'])
