@@ -1,219 +1,284 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-		<title>CS Department Event Page &mdash; </title>
-		<style type="text/css">
-			body {
-				margin:0;
-				padding:0;
-				font-family: Sans-Serif;
-				line-height: 1.5em;
-                background: #f5f6f7e2;
-			}
-			
-			header { 
-				background: #0c2340e2;
-				height: 100px;
-			}
-			
-			header h1 {
-				margin: 0;
-				padding-top: 15px;
-			}
-			
-			main {
-				padding-bottom: 10010px;
-				margin-bottom: -10000px;
-				float: left;
-				width: 100%;
-			}
-			
-			nav {
-				padding-bottom: 10450px;
-				margin-bottom: -10000px;
-				float: left;
-				width: 200px;
-				margin-left: -200px;
-				background: #2d62a3;
-			}	
-	
-			#wrapper {
-				overflow: hidden;
-			}
-						
-			#content {
-				margin-right: 230px; /* Same as 'nav' width */
-			}
-			
-			.innertube {
-				margin: 15px; /* Padding for content */
-				margin-top: 0;
-			}
-
-            #calendar{
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                overflow: hidden;
-                width: 350px;
-                margin: 0 auto;
-            }
-            
-		
-            #header {
-            background: #0c2340e2;
-            color: white;
-            text-align: center;
-            padding: 10px;
-        }
-
-        #daysOfWeek {
-            display: flex;  /* Makes days of the week appear in a row */
-            justify-content: space-between; /* Optional: Adds even spacing */
-        }
-
-        #daysOfWeek .day {
-            flex: 1;  /* Ensure that each day of the week takes equal space */
-            padding: 10px;
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Department Event Page &mdash; Student</title>
+    <style>
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
             box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
+        body {
+            background: #f7f8fa;
+        }
+
+        header {
+            background: #0c2340;
+            color: #ffffff;
+            padding: 20px;
             text-align: center;
         }
 
-        #days {
+        header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        #wrapper {
             display: flex;
-            flex-wrap: wrap; /* Ensures days wrap onto new rows for the calendar */
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        nav {
+            background: #2d62a3;
+            width: 220px;
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        nav h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 15px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 15px 0;
+            color: #2d62a3;
+        }
+
+        #calendar {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            max-width: 450px;
+            margin: 0 auto;
+            background: #dadada;
+        }
+
+        #header {
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #0c2340;
+        }
+
+        #prev, #next {
+            cursor: pointer;
+            color: #2d62a3;
+            font-size: 1.5em;
+        }
+
+        #daysOfWeek, #days {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #daysOfWeek .day, #days .day {
+            flex: 1 0 14.28%;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            color: #666;
         }
 
         #days .day {
-            flex: 1 0 14.28%; /* Distribute 7 days per row for the dates */
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
             cursor: pointer;
+            padding: 15px;
+            border-radius: 4px;
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s;
         }
 
-        .day:hover {
-            background: #e0e0e0;
+        #days .day:hover {
+            background: #e0e7ff;
         }
 
         .empty {
-            background: #f9f9f9;
+            background: transparent;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        #events-section {
+            margin-top: 30px;
+        }
+
+        #events-section h1 {
+            color: #2d62a3;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        #events-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #events-section li {
+            background: #f1f4f8;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #events-section li strong {
+            color: #333;
+        }
+
+        #logout-btn {
+            float: right;
+            background: #2d62a3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #logout-btn:hover {
+            background: #0c2340;
         }
     </style>
 </head>
-<body>      
+<body>
 
 <header>
-    <div class="innertube">
-        <h1 align="center">CS Department Event Page: Student</h1>
-        <form action="/logout"align="right">
-            <h2></h2>
-            <button type="submit">Logout</button>
-    </div>
+    <h1>CS Department Event Page: Student</h1>
+    <button id="logout-btn" onclick="window.location.href='/logout'">Logout</button>
 </header>
 
-
 <div id="wrapper">
+    <nav>
+        <h3>Tabs</h3>
+        <ul>
+            <li><a href="/my_activities">My Activities</a></li>
+            <li><a href="#">Print My Report</a></li>
+        </ul>
+    </nav>
+
     <main>
-        <div id="content">
-            <div class="innertube">
-                <h1>Hello {{info}}</h1>
-                <h2>Event Calendar</h2>
-                <div id="calendar">
-                    <div id="header">
-                        <span id="prev" style="cursor: pointer;">&#10094;</span>
-                        <span id="monthYear"></span>
-                        <span id="next" style="cursor: pointer;">&#10095;</span>
-                    </div>
-                    <div id="daysOfWeek">
-                        <div class="day">Sun</div>
-                        <div class="day">Mon</div>
-                        <div class="day">Tue</div>
-                        <div class="day">Wed</div>
-                        <div class="day">Thu</div>
-                        <div class="day">Fri</div>
-                        <div class="day">Sat</div>
-                    </div>
-                    <div id="days"></div>
-                </div>
+        <h2>{{info}}</h2>
+        <h2>Event Calendar</h2>
+        <div id="calendar">
+            <div id="header">
+                <span id="prev">&#10094;</span>
+                <span id="monthYear"></span>
+                <span id="next">&#10095;</span>
             </div>
+            <div id="daysOfWeek">
+                <div class="day">Sun</div>
+                <div class="day">Mon</div>
+                <div class="day">Tue</div>
+                <div class="day">Wed</div>
+                <div class="day">Thu</div>
+                <div class="day">Fri</div>
+                <div class="day">Sat</div>
+            </div>
+            <div id="days"></div>
+        </div>
+
+        <div id="events-section">
+            <h1>Events on Selected Date</h1>
+            {% if events %}
+                <ul>
+                    {% for event in events %}
+                        <li>
+                            <strong>{{ event[0] }}</strong><br>
+                            Date: {{ event[1] }}<br>
+                            Description: {{ event[2] }}<br>
+                            Location: {{ event[3] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events scheduled for this date. Please select another date.</p>
+            {% endif %}
         </div>
     </main>
-        
-    <nav>
-        <div class="innertube">
-            <h3 align="center">Tabs</h3>
-            <ul>
-               <li><a href="/my_activities">My Activities</a></li>
-                <li><a href="#">Print My Report</a></li>
-            </ul>
-        </div>
-    </nav>
 </div>
 
-<h1>Upcoming Events</h1>
-{% if event %}
-    <ul>
-        {% for e in event %}
-            <li>
-                <h2>{{ e[0] }}</h2>
-                <p><strong>Description:</strong> {{ e[2] }}</p>
-                <p><strong>Date:</strong> {{ e[1] }}</p>
-                <p><strong>Location:</strong> {{ e[3] }}</p>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No upcoming events found.</p>
-{% endif %}
-        
-
-
 <script>
-    const calendar = document.getElementById('calendar');
     const monthYear = document.getElementById('monthYear');
     const days = document.getElementById('days');
     const prev = document.getElementById('prev');
     const next = document.getElementById('next');
-
     let currentDate = new Date();
 
     function renderCalendar() {
         const month = currentDate.getMonth();
         const year = currentDate.getFullYear();
-
-        // Clear previous days
         days.innerHTML = '';
-
-        // Set month and year in the header
         monthYear.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
 
-        // Get the first day of the month
         const firstDay = new Date(year, month, 1).getDay();
         const lastDate = new Date(year, month + 1, 0).getDate();
 
-        // Add empty divs for days before the first day of the month
         for (let i = 0; i < firstDay; i++) {
             const emptyDiv = document.createElement('div');
             emptyDiv.classList.add('day', 'empty');
             days.appendChild(emptyDiv);
         }
 
-        // Add days of the month
         for (let date = 1; date <= lastDate; date++) {
             const dayDiv = document.createElement('div');
             dayDiv.classList.add('day');
             dayDiv.innerText = date;
-            dayDiv.onclick = () => alert(`You clicked on: ${month + 1}/${date}/${year}`);
+            dayDiv.onclick = () => {
+                const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+                window.location.href = `/studentview?date=${selectedDate}`;
+            };
             days.appendChild(dayDiv);
         }
 
         const lastDay = new Date(year, month, lastDate).getDay();
-            for (let i = lastDay + 1; i < 7; i++) {
-                const emptyDiv = document.createElement('div');
-                emptyDiv.classList.add('day', 'empty');
-                days.appendChild(emptyDiv);
-            }
+        for (let i = lastDay + 1; i < 7; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.classList.add('day', 'empty');
+            days.appendChild(emptyDiv);
+        }
     }
 
     prev.onclick = () => {
@@ -226,7 +291,6 @@
         renderCalendar();
     };
 
-    // Initial render
     renderCalendar();
 </script>
 

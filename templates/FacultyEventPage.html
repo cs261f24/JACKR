@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-   <title>CS Department Event Page &mdash; </title>
+   <title>CS Department Event Page &mdash; Faculty Event Page</title>
    <style type="text/css">
        body {
            margin: 0;
@@ -20,6 +20,13 @@
        header h1 {
            margin: 0;
            padding-top: 15px;
+           color: #000;
+       }
+       
+       header form {
+           position: absolute;
+           top: 20px;
+           right: 20px;
        }
        
        main {
@@ -113,20 +120,82 @@
            font-size: 12px;
            color: #000000;
        }
+
+       /* Styles for Quill editor */
+       #event_description_editor {
+           height: 150px;
+           max-height: 300px;
+           background-color: white;
+           margin-bottom: 15px;
+           border: 1px solid #ccc;
+           width: 100%;
+       }
+
+       /* Ensure the form elements are block-level to prevent wrapping */
+       form label, form input, form div, form button {
+           display: block;
+           width: 100%;
+           margin-bottom: 10px;
+       }
+
+       /* Adjust input fields */
+       form input[type="text"],
+       form input[type="date"] {
+           padding: 8px;
+           border: 1px solid #ccc;
+           border-radius: 4px;
+       }
+
+       /* Adjust button */
+       form button {
+           width: auto;
+           padding: 10px 20px;
+       }
+
+       /* Container for the form */
+       #event_form_container {
+           max-width: 600px;
+           margin: 20px auto; /* Center the form */
+       }
+
+       /* Clear floats if any */
+       .clearfix::after {
+           content: "";
+           clear: both;
+           display: table;
+       }
+
+       /* Override Quill's default scrollbar behavior */
+       .ql-editor {
+           overflow-y: auto;
+       }
+
+       .ql-editor::-webkit-scrollbar {
+           width: 8px;
+       }
+
+       .ql-editor::-webkit-scrollbar-thumb {
+           background: #cccccc;
+           border-radius: 4px;
+       }
+
+       .ql-editor::-webkit-scrollbar-thumb:hover {
+           background: #b3b3b3;
+       }
    </style>
+
+   <!-- Include Quill CSS -->
+   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body>      
 
 <header>
    <div class="innertube">
        <h1 align="center">CS Department Event Page</h1>
+       <form action="/logout" method="get">
+           <button type="submit">Logout</button>
+       </form>
    </div>
-</header>
-
-<header>
-   <form action="/logout">
-       <button type="submit">Logout</button>
-   </form>
 </header>
 
 <div id="wrapper">
@@ -134,7 +203,7 @@
        <div id="content">
            <div class="innertube">
                <h1>Event Input Calendar</h1>
-               <h2>{{info}}</h2>
+               <h2>{{ info }}</h2>
                <div id="calendar">
                    <div id="header">
                        <span id="prev" style="cursor: pointer;">&#10094;</span>
@@ -152,23 +221,27 @@
                    </div>
                    <div id="days"></div>
                </div>
-            
-               <form action="/add_event" method="POST">
-                <label for="event_name">Event Name:</label>
-                <input type="text" id="event_name" name="event_name" required>
-    
-                <label for="event_date">Event Date:</label>
-                <input type="date" id="event_date" name="event_date" required>
-    
-                <label for="event_description">Description:</label>
-                <textarea id="event_description" name="event_description"></textarea>
-    
-                <label for="event_location">Location:</label>
-                <input type="text" id="event_location" name="event_location">
-    
-                <button type="submit">Add Event</button>
-            </form>
-    
+
+               <!-- Wrap the form in a container -->
+               <div id="event_form_container">
+                   <form id="event_form" action="/add_event" method="POST">
+                       <label for="event_name">Event Name:</label>
+                       <input type="text" id="event_name" name="event_name" required>
+
+                       <label for="event_date">Event Date:</label>
+                       <input type="date" id="event_date" name="event_date" required>
+
+                       <label for="event_location">Location:</label>
+                       <input type="text" id="event_location" name="event_location">
+
+                       <label for="event_description">Description:</label>
+                       <div id="event_description_editor"></div>
+                       <input type="hidden" name="event_description" id="event_description">
+
+                       <button type="submit">Add Event</button>
+                   </form>
+               </div>
+
                <div id="eventList"></div>
            </div>
        </div>
@@ -188,7 +261,13 @@
    </nav>
 </div>
 
+<!-- Include Quill.js and Image Resize Module -->
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
+
+<!-- Existing calendar JavaScript code -->
 <script>
+   // Calendar variables and functions need to be in global scope
    const calendar = document.getElementById('calendar');
    const monthYear = document.getElementById('monthYear');
    const days = document.getElementById('days');
@@ -197,7 +276,6 @@
    const eventInput = document.getElementById('eventInput');
    const addEventButton = document.getElementById('addEventButton');
    const eventList = document.getElementById('eventList');
-   const selectedDateInput = document.getElementById('selectedDate');
 
    let currentDate = new Date();
    let selectedDate = null;
@@ -208,7 +286,7 @@
 
        // Clear previous days
        days.innerHTML = '';
-       eventList.innerHTML = '';
+       if(eventList) eventList.innerHTML = '';
 
        // Set month and year in the header
        monthYear.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
@@ -231,8 +309,10 @@
            dayDiv.innerText = date;
            dayDiv.onclick = () => {
                selectedDate = date;
-               selectedDateInput.value = `${currentDate.getFullYear()}-${month + 1}-${date}`; // Format as YYYY-MM-DD
-               alert(`You clicked on: ${currentDate.getMonth() + 1}/${date}/${currentDate.getFullYear()}`);
+               // Update the event_date input field with the selected date
+               const eventDateInput = document.getElementById('event_date');
+               eventDateInput.value = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
+               alert(`You selected: ${currentDate.getMonth() + 1}/${date}/${currentDate.getFullYear()}`);
            };
            days.appendChild(dayDiv);
        }
@@ -257,6 +337,52 @@
        currentDate.setMonth(currentDate.getMonth() + 1);
        renderCalendar();
    };
+</script>
+
+<!-- Quill initialization script -->
+<script>
+   let quill;  // Declare quill in the outer scope
+
+   document.addEventListener("DOMContentLoaded", function() {
+       // Register the Image Resize module
+       Quill.register('modules/imageResize', ImageResize);
+
+       var toolbarOptions = [
+           ['bold', 'italic', 'underline', 'strike'],
+           ['blockquote', 'code-block'],
+           [{ 'header': 1 }, { 'header': 2 }],
+           [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+           [{ 'script': 'sub'}, { 'script': 'super' }],
+           [{ 'indent': '-1'}, { 'indent': '+1' }],
+           [{ 'direction': 'rtl' }],
+           [{ 'size': ['small', false, 'large', 'huge'] }],
+           [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+           [{ 'color': [] }, { 'background': [] }],
+           [{ 'font': [] }],
+           [{ 'align': [] }],
+           ['clean'],
+           ['image']
+       ];
+
+       quill = new Quill('#event_description_editor', {
+           modules: {
+               toolbar: toolbarOptions,
+               imageResize: {}
+           },
+           theme: 'snow'
+       });
+
+       var form = document.getElementById('event_form');
+
+       form.addEventListener('submit', function(event) {
+           // Copy content from Quill editor to hidden input
+           var description = document.querySelector('input[name=event_description]');
+           description.value = quill.root.innerHTML;
+
+           // Debugging: Log the description content
+           console.log('Description content:', description.value);
+       });
+   });
 </script>
 
 </body>
