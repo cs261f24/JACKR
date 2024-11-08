@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS item;
+DROP TABLE IF EXISTS suggestion;
 DROP TABLE IF EXISTS attendance;
-DROP TABLE IF EXISTS admin_actions;
 DROP TABLE IF EXISTS events;
 DROP TABLE IF EXISTS users;
 /*DROP TABLE IF EXISTS other_departments;
@@ -47,6 +47,13 @@ CREATE TABLE attendance (
     UNIQUE(user_id, event_id)
 );
 
+
+CREATE TABLE IF NOT EXISTS suggestion (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    eventname TEXT NOT NULL,
+    eventdescription TEXT,
+    UNIQUE(eventname)
+);
 /* Departments Table: Stores information about various departments
 * id: Unique identifier for each department
 * name: The name of the department

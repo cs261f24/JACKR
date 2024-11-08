@@ -230,7 +230,7 @@ def student_view():
     conn.close()
     
     # Render `studentview.html`, passing the events for the selected date
-    return render_template('studentview.html', events=events)
+    return render_template('StudentView.html', events=events)
 
 # Sign-up route to register new users
 @app.route('/signup', methods=['GET', 'POST'])
@@ -274,14 +274,42 @@ def signup():
 def back_to_faculty():
     return render_template("FacultyEventPage.html")
 
-@app.route("/student_dashboard")
+@app.route("/student_dashboard", methods=['GET', 'POST'])
 def back_to_student():
-    conn = get_db()
+    conn = get_db()  # Get database connection
     cur = conn.cursor()
     cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
     event = cur.fetchall()
-    conn.close()
-    return render_template("StudentView.html", event = event)
+    
+    info1 = None  # Default value for info1
+    
+    if request.method == "POST":
+        # Get form data
+        eventname = request.form['eventname']
+        eventdescription = request.form['eventdescription']
+        
+        # Check if the event already exists in the suggestion table
+        #cur.execute("SELECT 1 FROM suggestion WHERE eventname = ?", (eventname))
+        existing_event = cur.fetchone()
+
+        if existing_event:
+            info1 = "Event already exists."  # Set message if duplicate is found
+        else:
+            try:
+                # Insert the new event data into the 'suggestion' table
+                cur.execute(
+                    'INSERT INTO suggestion (eventname, eventdescription) VALUES (?, ?)',
+                    (eventname, eventdescription)
+                )
+                conn.commit()  # Save changes
+                info1 = "Event added successfully!"  # Success message
+            except sqlite3.IntegrityError as e:
+                info1 = "Event already exists."
+            finally:
+                conn.close()  # Close connection
+
+    return render_template("StudentView.html", event=event, info1=info1)
+    
 
 @app.route("/my_activities")
 def my_activities():

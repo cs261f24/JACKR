@@ -25,6 +25,10 @@ VALUES (1, 1, '2024-10-10'),
        (1, 4, '2024-10-11'),
        (1, 5, '2024-10-11');
 
+-- populates the suggestion table (stores details of the events students request to faculty)
+INSERT INTO suggestion (eventname, eventdescription)
+VALUES ('Event 1', 'This is a description')
+
 -- populates the other_departments table with Name, description, and head of dept in the database
 /*INSERT INTO other_departments (name, description, head)
 VALUES ('Philosophy', 'Philosophy Department focuses on philosophy', 'Richard Polt'),
