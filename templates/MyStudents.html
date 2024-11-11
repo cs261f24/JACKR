@@ -60,6 +60,22 @@
         .button:hover {
             background-color: #256ea9;
         }
+
+        .print-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .print-btn:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
@@ -71,27 +87,30 @@
         <tr>
             <th>Student Name</th>
             <th>Student ID</th>
-            <th>Attendance</th>
+            <th>Events Attended</th>
         </tr>
         <tr>
             <td>John Doe</td>
             <td>12345</td>
-            <td>95%</td>
+            <td>9</td>
         </tr>
         <tr>
             <td>Jane Smith</td>
             <td>67890</td>
-            <td>89%</td>
+            <td>8</td>
         </tr>
         <tr>
             <td>Emily Davis</td>
             <td>54321</td>
-            <td>92%</td>
+            <td>3</td>
         </tr>
         <!-- Add more students as needed -->
     </table>
 
     <a href="/faculty" class="button">Back to Faculty Page</a>
+    
+    <!-- Print button -->
+    <a href="javascript:void(0);" class="print-btn" onclick="window.print();">Print Page</a>
 </div>
 
 </body>
