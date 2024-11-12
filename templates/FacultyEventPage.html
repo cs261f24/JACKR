@@ -1,132 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>CS Department Event Page &mdash; Faculty Event Page</title>
     <style type="text/css">
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: Sans-Serif;
-            line-height: 1.5em;
-            background: #eec2d7af;
+            line-height: 1.6;
+            background: #f4f1f2af;
+            color: #333;
         }
 
         header {
-            background: #ec8aa1af;
+            background: #0c2340e2;
+            color: #fff;
             height: 100px;
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         header h1 {
+            font-size: 1.8em;
+            font-weight: bold;
             margin: 0;
-            padding-top: 15px;
-            color: #000;
         }
 
-        header form {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        header form button {
+            background: #f4f1f2;
+            color: #0c2340;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background-color 0.3s;
         }
 
-        main {
-            padding-bottom: 10010px;
-            margin-bottom: -10000px;
-            float: left;
-            width: 100%;
-        }
-
-        nav {
-            padding-bottom: 10450px;
-            margin-bottom: -10000px;
-            float: left;
-            width: 200px;
-            margin-left: -200px;
-            background: #ec7794;
+        header form button:hover {
+            background-color: #d3d3d3;
         }
 
         #wrapper {
-            overflow: hidden;
+            display: flex;
+            margin-top: 0;
+            padding: 20px;
+        }
+
+        nav {
+            width: 220px;
+            background: #547fdb;
+            padding: 20px;
+            border-radius: 8px;
+            color: #fff;
+        }
+
+        nav h3 {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li a {
+            display: block;
+            color: #f4f1f2;
+            text-decoration: none;
+            padding: 10px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav ul li a:hover {
+            background-color: #3a5a98;
         }
 
         #content {
-            margin-right: 230px;
-            /* Same as 'nav' width */
-        }
-
-        .innertube {
-            margin: 15px;
-            /* Padding for content */
-            margin-top: 0;
-        }
-
-        #calendar {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            overflow: hidden;
-            width: 350px;
-            margin: 0 auto;
-        }
-
-        #header {
-            background: #f0b5ba;
-            color: white;
-            text-align: center;
-            padding: 10px;
-        }
-
-        #daysOfWeek {
-            display: flex;
-            /* Makes days of the week appear in a row */
-            justify-content: space-between;
-            /* Optional: Adds even spacing */
-        }
-
-        #daysOfWeek .day {
             flex: 1;
-            /* Ensure that each day of the week takes equal space */
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
+            padding: 20px 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-left: 20px;
         }
 
-        #days {
-            display: flex;
-            flex-wrap: wrap;
-            /* Ensures days wrap onto new rows for the calendar */
+        h1 {
+            font-size: 1.6em;
+            color: #0c2340;
         }
 
-        #days .day {
-            flex: 1 0 14.28%;
-            /* Distribute 7 days per row for the dates */
-            padding: 10px;
-            box-sizing: border-box;
-            text-align: center;
-            cursor: pointer;
+        #event_form_container {
+            max-width: 600px;
+            margin-top: 20px;
         }
 
-        .day:hover {
-            background: #e0e0e0;
+        /* Styling for form elements */
+        form label {
+            font-weight: bold;
+            margin-top: 10px;
+            display: inline-block;
         }
 
-        .empty {
-            background: #f9f9f9;
-        }
-
-        #eventInput {
-            margin: 10px 0;
-            width: calc(100% - 20px);
-        }
-
-        #addEventButton {
+        form input[type="text"],
+        form input[type="date"],
+        #event_description_editor {
             width: 100%;
-            padding: 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-top: 5px;
+            font-size: 1em;
         }
 
-        .event {
-            font-size: 12px;
-            color: #000000;
+        form button {
+            background: #0c2340;
+            color: #f4f1f2;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+
+        form button:hover {
+            background-color: #547fdb;
         }
 
         /* Styles for Quill editor */
@@ -134,78 +150,10 @@
             background-color: white;
             margin-bottom: 15px;
             border: 1px solid #ccc;
-            display: inline-block;
-            padding: 0;
-            /* Optional: Set minimum dimensions */
-            min-width: 300px;
             min-height: 150px;
-            /* Optional: Set maximum dimensions */
-            /* max-width: 100%; */
-            /* max-height: 800px; */
-            overflow: visible;
-            /* Allow content to expand the editor */
         }
 
-        /* Allow the editor container to expand */
-        #event_description_editor .ql-container {
-            height: auto !important;
-            width: auto !important;
-            overflow: visible;
-        }
-
-        /* Allow the editor's content area to expand */
-        #event_description_editor .ql-editor {
-            height: auto !important;
-            width: auto !important;
-            overflow: visible;
-        }
-
-        /* Image styling within the editor */
-        #event_description_editor .ql-editor img {
-            max-width: none;
-            height: auto;
-            display: inline-block;
-        }
-
-        /* Ensure the form elements are block-level to prevent wrapping */
-        form label,
-        form input,
-        form div,
-        form button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        /* Adjust input fields */
-        form input[type="text"],
-        form input[type="date"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Adjust button */
-        form button {
-            width: auto;
-            padding: 10px 20px;
-        }
-
-        /* Container for the form */
-        #event_form_container {
-            max-width: 600px;
-            margin: 20px auto;
-            /* Center the form */
-        }
-
-        /* Clear floats if any */
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
-        }
-
-        /* Override Quill's default scrollbar behavior */
+        /* Override Quill's scrollbar */
         .ql-editor {
             overflow-y: auto;
         }
@@ -219,254 +167,78 @@
             border-radius: 4px;
         }
 
-        .ql-editor::-webkit-scrollbar-thumb:hover {
-            background: #b3b3b3;
-        }
+        
     </style>
 
-   <!-- Include Quill CSS -->
-   <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <!-- Include Quill CSS -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
-<body>      
+<body>
 
 <header>
-   <div class="innertube">
-       <h1 align="center">CS Department Event Page</h1>
-       <form action="/logout" method="get">
-           <button type="submit">Logout</button>
-       </form>
-   </div>
+    <h1>CS Department Event Page</h1>
+    <form action="/logout" method="get">
+        <button type="submit">Logout</button>
+    </form>
 </header>
 
 <div id="wrapper">
-   <main>
-       <div id="content">
-           <div class="innertube">
-               <h1>Event Input Calendar</h1>
-               <h2>{{ info }}</h2>
-               <div id="calendar">
-                   <div id="header">
-                       <span id="prev" style="cursor: pointer;">&#10094;</span>
-                       <span id="monthYear"></span>
-                       <span id="next" style="cursor: pointer;">&#10095;</span>
-                   </div>
-                   <div id="daysOfWeek">
-                       <div class="day">Sun</div>
-                       <div class="day">Mon</div>
-                       <div class="day">Tue</div>
-                       <div class="day">Wed</div>
-                       <div class="day">Thu</div>
-                       <div class="day">Fri</div>
-                       <div class="day">Sat</div>
-                   </div>
-                   <div id="days"></div>
-               </div>
+    <nav>
+        <h3>Tabs</h3>
+        <ul>
+            <li><a href="/my_students">My Students</a></li>
+            <li><a href="/print_report">Print Report</a></li>
+            <li><a href="/studentView">Student View</a></li>
+        </ul>
+    </nav>
 
-               <!-- Wrap the form in a container -->
-               <div id="event_form_container">
-                   <form id="event_form" action="/add_event" method="POST">
-                       <label for="event_name">Event Name:</label>
-                       <input type="text" id="event_name" name="event_name" required>
+    <main id="content">
+        <h1>Hello, {{ info }}!</h1>
+        <div id="event_form_container">
+            <form id="event_form" action="/add_event" method="POST">
+                <label for="event_name">Event Name:</label>
+                <input type="text" id="event_name" name="event_name" required>
 
-                       <label for="event_date">Event Date:</label>
-                       <input type="date" id="event_date" name="event_date" required>
+                <label for="event_date">Event Date:</label>
+                <input type="date" id="event_date" name="event_date" required>
 
-                       <label for="event_location">Location:</label>
-                       <input type="text" id="event_location" name="event_location">
+                <label for="event_location">Location:</label>
+                <input type="text" id="event_location" name="event_location">
 
-                       <label for="event_description">Description:</label>
-                       <div id="event_description_editor"></div>
-                       <input type="hidden" name="event_description" id="event_description">
+                <label for="event_description">Description:</label>
+                <div id="event_description_editor"></div>
+                <input type="hidden" name="event_description" id="event_description">
 
-                       <button type="submit">Add Event</button>
-                   </form>
-               </div>
-
-               <div id="eventList"></div>
-           </div>
-       </div>
-   </main>
-       
-   <nav>
-       <div class="innertube">
-           <h3 align="center">Tabs</h3>
-           <ul>
-               <li><a href="/my_students">My Students</a></li>
-               <li><a href="/print_report">Print Report</a></li>
-               <li><a href="#">Link 3</a></li>
-               <li><a href="#">Link 4</a></li>
-               <li><a href="#">Link 5</a></li>
-           </ul>
-       </div>
-   </nav>
+                <button type="submit">Add Event</button>
+            </form>
+        </div>
+    </main>
 </div>
 
 <!-- Include Quill.js and Image Resize Module -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
 
-<!-- Existing calendar JavaScript code -->
 <script>
-   // Calendar variables and functions need to be in global scope
-   const calendar = document.getElementById('calendar');
-   const monthYear = document.getElementById('monthYear');
-   const days = document.getElementById('days');
-   const prev = document.getElementById('prev');
-   const next = document.getElementById('next');
-   const eventInput = document.getElementById('eventInput');
-   const addEventButton = document.getElementById('addEventButton');
-   const eventList = document.getElementById('eventList');
-
-   let currentDate = new Date();
-   let selectedDate = null;
-
-   function renderCalendar() {
-       const month = currentDate.getMonth();
-       const year = currentDate.getFullYear();
-
-       // Clear previous days
-       days.innerHTML = '';
-       if(eventList) eventList.innerHTML = '';
-
-       // Set month and year in the header
-       monthYear.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
-
-       // Get the first day of the month
-       const firstDay = new Date(year, month, 1).getDay();
-       const lastDate = new Date(year, month + 1, 0).getDate();
-
-       // Add empty divs for days before the first day of the month
-       for (let i = 0; i < firstDay; i++) {
-           const emptyDiv = document.createElement('div');
-           emptyDiv.classList.add('day', 'empty');
-           days.appendChild(emptyDiv);
-       }
-
-       // Add days of the month
-       for (let date = 1; date <= lastDate; date++) {
-           const dayDiv = document.createElement('div');
-           dayDiv.classList.add('day');
-           dayDiv.innerText = date;
-           dayDiv.onclick = () => {
-               selectedDate = date;
-               // Update the event_date input field with the selected date
-               const eventDateInput = document.getElementById('event_date');
-               eventDateInput.value = `${year}-${String(month + 1).padStart(2, '0')}-${String(date).padStart(2, '0')}`;
-               alert(`You selected: ${currentDate.getMonth() + 1}/${date}/${currentDate.getFullYear()}`);
-           };
-           days.appendChild(dayDiv);
-       }
-
-       const lastDay = new Date(year, month, lastDate).getDay();
-       for (let i = lastDay + 1; i < 7; i++) {
-           const emptyDiv = document.createElement('div');
-           emptyDiv.classList.add('day', 'empty');
-           days.appendChild(emptyDiv);
-       }
-   }
-
-   // Initial render
-   renderCalendar();
-   
-   prev.onclick = () => {
-       currentDate.setMonth(currentDate.getMonth() - 1);
-       renderCalendar();
-   };
-
-   next.onclick = () => {
-       currentDate.setMonth(currentDate.getMonth() + 1);
-       renderCalendar();
-   };
-
-</script>
-<!-- Extend Quill's Image Format -->
-<script>
-    const Image = Quill.import('formats/image');
-  
-    class ImageFormat extends Image {
-      static formats(domNode) {
-        let formats = super.formats(domNode);
-        formats.width = domNode.getAttribute('width') || domNode.style.width;
-        formats.height = domNode.getAttribute('height') || domNode.style.height;
-        return formats;
-      }
-  
-      format(name, value) {
-        if (name === 'width' || name === 'height') {
-          if (value) {
-            this.domNode.setAttribute(name, value);
-            this.domNode.style[name] = value;
-          } else {
-            this.domNode.removeAttribute(name);
-            this.domNode.style[name] = '';
-          }
-        } else {
-          super.format(name, value);
-        }
-      }
-    }
-  
-    Quill.register(ImageFormat, true);
-  </script>
-  
-  <!-- Quill Initialization -->
-  <script>
     document.addEventListener("DOMContentLoaded", function() {
-      var quill = new Quill('#event_description_editor', {
-        theme: 'snow',
-        modules: {
-          toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['link', 'image'],
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-          ],
-          imageResize: {}
-        }
-      });
-  
-      quill.on('text-change', function(delta, oldDelta, source) {
-        if (source === 'user') {
-          delta.ops.forEach(function(op) {
-            if (op.insert && op.insert.image) {
-              var range = quill.getSelection();
-              if (range) {
-                var [leaf, offset] = quill.getLeaf(range.index);
-                if (leaf && leaf.domNode && leaf.domNode.tagName === 'IMG') {
-                  if (!leaf.domNode.getAttribute('width')) {
-                    leaf.domNode.setAttribute('width', '600');
-                    leaf.domNode.setAttribute('height', 'auto');
-                  }
-                }
-              }
+        var quill = new Quill('#event_description_editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['link', 'image'],
+                    [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+                ],
+                imageResize: {}
             }
-          });
-        }
-      });
-  
-      document.getElementById('event_form').addEventListener('submit', function(event) {
-        prepareFormSubmission();
-        document.querySelector('input[name="event_description"]').value = quill.root.innerHTML;
-      });
-  
-      function prepareFormSubmission() {
-        var editorContent = quill.root.innerHTML;
-        var tempDiv = document.createElement('div');
-        tempDiv.innerHTML = editorContent;
-  
-        var images = tempDiv.querySelectorAll('img');
-        images.forEach(function(img) {
-          if (!img.getAttribute('width')) {
-            img.setAttribute('width', '600');
-            img.setAttribute('height', 'auto');
-          }
-          img.removeAttribute('style'); // Remove any inline styles
         });
-  
-        document.querySelector('#event_description').value = tempDiv.innerHTML;
-      }
+
+        document.getElementById('event_form').addEventListener('submit', function(event) {
+            document.querySelector('input[name="event_description"]').value = quill.root.innerHTML;
+        });
     });
-  </script>
+</script>
 
 </body>
 </html>
