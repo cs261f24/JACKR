@@ -6,53 +6,140 @@
     <title>CS Department</title>
     <link rel="stylesheet" href="styles.css">
     <style>
-        body{
-        background: #ffffff
-    }
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
+        body {
+            background-color: #f4f1f2af;
+            color: #333;
+            font-size: 1rem;
+            padding: 20px;
+        }
+
+        header {
+            background-color: #0c2340e2;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 40px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #0c2340;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-top: 15px;
+            display: inline-block;
+            color: #444;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fafafa;
+        }
+
+        input[type="password"] {
+            font-family: 'Arial', sans-serif;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #0c2340e2;
+            color: white;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #256ea9;
+        }
+
+        header h4, header h6 {
+            margin-top: 10px;
+            color: #666;
+        }
     </style>
 </head>
 <body>
-    <header>
-        <h1>CS Department </h1>
-        <nav>
-            <ul>
-            </ul>
-        </nav>
-    </header>
 
-    <main>
-        <section id="signup">
-            <h2>Signup Page</h2>
-            <h3>{{info}}</h3>
-            <form action="/signup" method="POST">
-                <label for="role">Role:</label>
-                <select id="role" name="role" required>
+<header>
+    <h1>CS Department</h1>
+    <nav>
+        <ul>
+            <!-- Add navigation links here if needed -->
+        </ul>
+    </nav>
+</header>
+
+<main>
+    <section id="signup">
+        <h2>Signup Page</h2>
+        <h3></h3>
+        <form action="/signup" method="POST">
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
                 <option value="student">Student</option>
                 <option value="admin">Faculty</option>
-                </select>
-                <header>
-                    <h4></h4>
-                <label for="email">Email:</label>
-                <input type="text" id="email" name="email" required>
-                <header>
-                    <h6></h6>
-                </header>
-                <label for="firstName">First Name:</label>
-                <input type="text" id="firstName" name="firstName" required>
-                
-                <label for="lastName">Last Name:</label>
-                <input type="text" id="lastName" name="lastName" required>
-                <header>
-                    <h6></h6>
-                </header>
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-                <header>
-                    <h5></h5>
+            </select>
+            
+            <label for="email">Email:</label>
+            <input type="text" id="email" name="email" required>
 
-                <button type="submit">Signup</button>
-            </form>
-    </main>
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+            
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Signup</button>
+        </form>
+    </section>
+</main>
 
 </body>
 </html>
