@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Activities</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #35495e;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav {
+            background-color: #2c3e50;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            margin: 0 10px;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #35495e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f7f7f7;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            background-color: #35495e;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 0 5px;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background-color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>My Activities</h1>
+</header>
+
+<main>
+    <h2>Activity Summary</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Activity Name</th>
+                <th>Date</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>Code Review Session</td>
+                <td>2024-11-01</td>
+                <td>Reviewed code for class.</td>
+            </tr>
+            <tr>
+                <td>Cybersecurity Workshop</td>
+                <td>2024-11-03</td>
+                <td>Attended workshop on Cybersecurity.</td>
+            </tr>
+            <tr>
+                <td>Group Project Meeting</td>
+                <td>2024-11-05</td>
+                <td>Discussed project completion with Software Engineering II group.</td>
+            </tr>
+            <tr>
+                <td>Guest Lecture: Cybersecurity within Target</td>
+                <td>2024-11-06</td>
+                <td>Attended a lecture by industry expert on his life with target doing cybersecurity.</td>
+            </tr>
+            <tr>
+                <td>Midterm OS Exam Preparation</td>
+                <td>2024-11-08</td>
+                <td>Prepared for midterm exams by studying, SCARY!</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="btn-container">
+        <a href="/student_dashboard" class="btn">Back to Dashboard</a>
+        <button onclick="printActivities()" class="btn">Print Activities</button>
+    </div>
+</main>
+
+<script>
+    function printActivities() {
+        window.print();
+    }
+</script>
+
+</body>
+</html>
+
