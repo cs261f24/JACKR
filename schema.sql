@@ -30,7 +30,7 @@ CREATE TABLE users (
 */
 CREATE TABLE events (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     description TEXT,
     date TEXT NOT NULL,
     location TEXT
