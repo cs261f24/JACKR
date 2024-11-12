@@ -5,24 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Students</title>
     <style>
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
         body {
-            background: #eef5ff;
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 0;
         }
 
         h1 {
             text-align: center;
-            color: #444;
+            color: #0c2340;
+            font-size: 2rem;
+            margin-top: 30px;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 40px auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         table {
@@ -36,45 +49,50 @@
         }
 
         th, td {
-            padding: 10px;
-            text-align: center;
+            padding: 12px;
+            text-align: left;
         }
 
         th {
             background-color: #0c2340e2;
             color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .button, .print-btn {
+            display: block;
+            width: 200px;
+            padding: 12px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
             background-color: #0c2340e2;
             color: white;
-            text-align: center;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         .button:hover {
-            background-color: #256ea9;
+            background-color: #255793;
         }
 
         .print-btn {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #28a745;
+            background-color: #0c2340e2;
             color: white;
-            text-align: center;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         .print-btn:hover {
-            background-color: #218838;
+            background-color: #255793;
         }
     </style>
 </head>
@@ -84,27 +102,31 @@
     <h1>My Students</h1>
 
     <table>
-        <tr>
-            <th>Student Name</th>
-            <th>Student ID</th>
-            <th>Events Attended</th>
-        </tr>
-        <tr>
-            <td>John Doe</td>
-            <td>12345</td>
-            <td>9</td>
-        </tr>
-        <tr>
-            <td>Jane Smith</td>
-            <td>67890</td>
-            <td>8</td>
-        </tr>
-        <tr>
-            <td>Emily Davis</td>
-            <td>54321</td>
-            <td>3</td>
-        </tr>
-        <!-- Add more students as needed -->
+        <thead>
+            <tr>
+                <th>Student Name</th>
+                <th>Student ID</th>
+                <th>Events Attended</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>John Doe</td>
+                <td>12345</td>
+                <td>9</td>
+            </tr>
+            <tr>
+                <td>Jane Smith</td>
+                <td>67890</td>
+                <td>8</td>
+            </tr>
+            <tr>
+                <td>Emily Davis</td>
+                <td>54321</td>
+                <td>3</td>
+            </tr>
+            <!-- Add more students as needed -->
+        </tbody>
     </table>
 
     <a href="/faculty" class="button">Back to Faculty Page</a>
@@ -115,3 +137,4 @@
 
 </body>
 </html>
+
