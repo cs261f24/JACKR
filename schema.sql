@@ -15,8 +15,8 @@ DROP TABLE IF EXISTS users;
 */
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    firstName TEXT UNIQUE NOT NULL,
-    lastName TEXT UNIQUE NOT NULL,
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     role TEXT NOT NULL CHECK (role IN ('student', 'admin'))
