@@ -193,7 +193,7 @@ def login():
             # Check the user's role
             role = user['role']
             if role == 'admin':
-                return render_template("FacultyEventPage.html")  # Redirect to admin view
+                return render_template("FacultyEventPage.html", info = "Hello " + firstName + "!")  # Redirect to admin view
             else:
                 return render_template("StudentView.html", info = "Hello " + firstName + "!")  # Redirect to student view
         else:

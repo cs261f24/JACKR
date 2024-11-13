@@ -25,12 +25,12 @@ CREATE TABLE users (
 /*Event Table: Stores event details
 * id: Unique identifier for each event
 * name: The name of the event
-* Descri
+* description: The name of the description
 *
 */
 CREATE TABLE events (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
+    name TEXT UNIQUE NOT NULL,
     description TEXT,
     date TEXT NOT NULL,
     location TEXT

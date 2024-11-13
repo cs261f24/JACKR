@@ -97,7 +97,7 @@ def main():
     print("Populating tables...")
     execute_sql_script(cursor, populate_file)
 
-    tables = ['users', 'events', 'attendance', 'suggestion']
+    tables = ['users', 'events', 'attendance', 'other_departments']
     for table in tables:
         check_table_data(cursor, table)
 
