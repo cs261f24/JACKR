@@ -146,6 +146,11 @@ def add_events():
         conn = get_db()  # Get database connection
         cur = conn.cursor()
 
+        # Fetch the suggestions from the database
+        suggestion = []
+        cur.execute("SELECT eventname, eventdescription FROM suggestion")
+        suggestion = cur.fetchall()
+
         # Insert the new event into the database
         try:
             cur.execute(
@@ -160,10 +165,10 @@ def add_events():
             conn.close()  # Close the connection
 
         # Redirect to the FacultyEventPage with a success message
-        return render_template('FacultyEventPage.html', info=info_message)
+        return render_template('FacultyEventPage.html', info=info_message, suggestion=suggestion)
 
     # Render the FacultyEventPage if it's a GET request
-    return render_template('FacultyEventPage.html')
+    return render_template('FacultyEventPage.html', suggestion=suggestion)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -175,6 +180,8 @@ def login():
         conn = get_db()
         cur = conn.cursor()
 
+
+        # Fetch the events from the database  
         cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
         event = cur.fetchall()
 
@@ -182,6 +189,11 @@ def login():
         userquery = 'SELECT * FROM users WHERE email = ?'
         cur.execute(userquery, (email,))
         user = cur.fetchone()
+
+        # Fetch the suggestions from the database
+        suggestion = []
+        cur.execute("SELECT eventname, eventdescription FROM suggestion")
+        suggestion = cur.fetchall()
 
         conn.close()
 
@@ -193,13 +205,14 @@ def login():
             # Check the user's role
             role = user['role']
             if role == 'admin':
-                return render_template("FacultyEventPage.html")  # Redirect to admin view
+                return render_template("FacultyEventPage.html", info = "Hello " + firstName + "!", suggestion=suggestion)  # Redirect to admin view
             else:
                 return render_template("StudentView.html", info = "Hello " + firstName + "!")  # Redirect to student view
         else:
             flash('Invalid email or password', 'error')
             return render_template('loginPage.html')
     return render_template('loginPage.html')
+
            
 @app.route('/')
 def items():
@@ -212,6 +225,26 @@ def items():
 
 
     return render_template('StartPage.html', items=get_logininfo())
+
+
+@app.route('/studentview4faculty')
+def student_view_4faculty():
+    # Retrieve the selected date from the query parameter
+    selected_date = request.args.get('date')
+    
+    # Connect to the database and query events for the selected date
+    conn = sqlite3.connect('db.sqlite3')
+    cursor = conn.cursor()
+    
+    events = []
+    if selected_date:
+        cursor.execute("SELECT name, date, description, location FROM events WHERE date = ?", (selected_date,))
+        events = cursor.fetchall()
+    
+    conn.close()
+    
+    # Render `studentviewforfaculty.html`, passing the events for the selected date
+    return render_template('StudentViewForFaculty.html', events=events)
 
 @app.route('/studentview')
 def student_view():
@@ -231,6 +264,8 @@ def student_view():
     
     # Render `studentview.html`, passing the events for the selected date
     return render_template('StudentView.html', events=events)
+
+
 
 # Sign-up route to register new users
 @app.route('/signup', methods=['GET', 'POST'])
@@ -272,12 +307,21 @@ def signup():
 
 @app.route("/faculty")
 def back_to_faculty():
-    return render_template("FacultyEventPage.html")
+    conn = get_db()
+    cur = conn.cursor()
+    suggestion = []
+    cur.execute("SELECT eventname, eventdescription FROM suggestion")
+    suggestion = cur.fetchall()
+
+    conn.close()
+    return render_template("FacultyEventPage.html", suggestion=suggestion)
 
 @app.route("/student_dashboard", methods=['GET', 'POST'])
 def back_to_student():
     conn = get_db()  # Get database connection
     cur = conn.cursor()
+
+    # Fetch events for the dashboard
     cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
     event = cur.fetchall()
     
@@ -288,32 +332,77 @@ def back_to_student():
         eventname = request.form['eventname']
         eventdescription = request.form['eventdescription']
         
-        # Check if the event already exists in the suggestion table
-        #cur.execute("SELECT 1 FROM suggestion WHERE eventname = ?", (eventname))
-        existing_event = cur.fetchone()
-
-        if existing_event:
-            info1 = "Event already exists."  # Set message if duplicate is found
-        else:
-            try:
-                # Insert the new event data into the 'suggestion' table
-                cur.execute(
-                    'INSERT INTO suggestion (eventname, eventdescription) VALUES (?, ?)',
-                    (eventname, eventdescription)
-                )
-                conn.commit()  # Save changes
-                info1 = "Event added successfully!"  # Success message
-            except sqlite3.IntegrityError as e:
-                info1 = "Event already exists."
-            finally:
-                conn.close()  # Close connection
+        try:
+            # Insert the new event data into the 'suggestion' table
+            cur.execute(
+                'INSERT INTO suggestion (eventname, eventdescription) VALUES (?, ?)',
+                (eventname, eventdescription)
+            )
+            conn.commit()  # Save changes
+            info1 = "Event added successfully!"  # Success message
+        except sqlite3.IntegrityError as e:
+            info1 = "An error occurred while adding the event."  # Error message for unexpected issues
+        finally:
+            conn.close()  # Close connection
 
     return render_template("StudentView.html", event=event, info1=info1)
+
+
+@app.route("/student_dashboard4faculty", methods=['GET', 'POST'])
+def back_to_student_for_faculty():
+    conn = get_db()  # Get database connection
+    cur = conn.cursor()
+
+    # Fetch events for the dashboard
+    cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
+    event = cur.fetchall()
     
+    info1 = None  # Default value for info1
+    
+    if request.method == "POST":
+        # Get form data
+        eventname = request.form['eventname']
+        eventdescription = request.form['eventdescription']
+        
+        try:
+            # Insert the new event data into the 'suggestion' table
+            cur.execute(
+                'INSERT INTO suggestion (eventname, eventdescription) VALUES (?, ?)',
+                (eventname, eventdescription)
+            )
+            conn.commit()  # Save changes
+            info1 = "Event added successfully!"  # Success message
+        except sqlite3.IntegrityError as e:
+            info1 = "An error occurred while adding the event."  # Error message for unexpected issues
+        finally:
+            conn.close()  # Close connection
+
+    return render_template("StudentViewForFaculty.html", event=event, info1=info1)
+
+
+@app.route('/delete_event/<event_name>', methods=['POST'])
+def delete_event(event_name):
+    # Connect to the SQLite database
+    conn = get_db()
+    cursor = conn.cursor()
+
+    # Execute the delete statement to remove the event by its name
+    cursor.execute("DELETE FROM suggestion WHERE eventname = ?", (event_name,))
+    
+    # Commit and close connection
+    conn.commit()
+    conn.close()
+    # Redirect to the page where events are displayed, with a query parameter to show the modal
+    return redirect(url_for('back_to_faculty', show_modal=True))
+
 
 @app.route("/my_activities")
 def my_activities():
     return render_template("MyActivities.html")
+
+@app.route("/my_activities4faculty")
+def my_activities_for_faculty():
+    return render_template("MyActivitiesforFaculty.html")
 
 @app.route('/logout')
 def logout():

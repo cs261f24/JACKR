@@ -15,8 +15,8 @@ DROP TABLE IF EXISTS users;
 */
 CREATE TABLE users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    firstName TEXT UNIQUE NOT NULL,
-    lastName TEXT UNIQUE NOT NULL,
+    firstName TEXT NOT NULL,
+    lastName TEXT NOT NULL,
     password TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     role TEXT NOT NULL CHECK (role IN ('student', 'admin'))
@@ -25,7 +25,7 @@ CREATE TABLE users (
 /*Event Table: Stores event details
 * id: Unique identifier for each event
 * name: The name of the event
-* Descri
+* description: The name of the description
 *
 */
 CREATE TABLE events (
@@ -48,11 +48,10 @@ CREATE TABLE attendance (
 );
 
 
-CREATE TABLE IF NOT EXISTS suggestion (
+CREATE TABLE suggestion (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eventname TEXT NOT NULL,
-    eventdescription TEXT,
-    UNIQUE(eventname)
+    eventdescription TEXT
 );
 /* Departments Table: Stores information about various departments
 * id: Unique identifier for each department
