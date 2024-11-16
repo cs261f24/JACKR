@@ -103,7 +103,7 @@
 
         h1 {
             font-size: 1.6em;
-            color: #0c2340;
+            color: #bcbcbc;
         }
 
         #event_form_container {
@@ -166,6 +166,55 @@
             background: #cccccc;
             border-radius: 4px;
         }
+        /* Modal Styles */
+        #eventModal {
+            display: none; /* Modal hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Background overlay */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modalContent {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        #closeModal {
+            float: right;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .delete-btn {
+            background: #ee3333;
+            color: #f4f1f2;
+            padding: 5px 10px; /* Smaller padding */
+            border: none;
+            border-radius: 5px;
+            font-size: 0.8em; /* Smaller font */
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: auto; /* Adjusts width to content */
+            margin-right: 5px;
+            margin-top:-50px;
+          
+        } 
+
+        .delete-btn:hover {
+            background-color: darkred;  /* Darker red when hovering */
+        }
+
+        
 
         
     </style>
@@ -187,12 +236,13 @@
         <h3>Tabs</h3>
         <ul>
             <li><a href="/my_students">My Students</a></li>
-            <li><a href="/studentview">Student View</a></li>
+            <li><a href="/studentview4faculty">Student View</a></li>
+            <li><a href="javascript:void(0)" onclick="openModal()">View Suggested Events</a></li>
         </ul>
     </nav>
 
     <main id="content">
-        <h1>Hello, {{ info }}!</h1>
+        <h1>{{info}}</h1>
         <div id="event_form_container">
             <form id="event_form" action="/add_event" method="POST">
                 <label for="event_name">Event Name:</label>
@@ -211,6 +261,32 @@
                 <button type="submit">Add Event</button>
             </form>
         </div>
+
+
+        <div id="eventModal">
+          <div id="modalContent">
+              <div id="closeModal"></div>
+              <h2>Suggested Events</h2>
+      
+              {% if suggestion %}
+              <ul style="max-height: 300px; overflow-y: scroll;">
+                  {% for s in suggestion %}
+                      <li>
+                          <strong>Event Name: {{ s[0] }}</strong><br>
+                          Description: {{ s[1] }}<br>
+      
+                          <!-- Delete Button for each suggested event -->
+                          <form method="POST" action="{{ url_for('delete_event', event_name=s[0]) }}" style="text-align: right;">
+                              <button type="submit" class="delete-btn">Delete</button>
+                          </form>
+                      </li>
+                  {% endfor %}
+              </ul>
+              {% else %}
+                  <p>No events suggested.</p>
+              {% endif %}
+          </div>
+      </div>
     </main>
 </div>
 
@@ -218,26 +294,132 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/quill-image-resize-module@3.0.0/image-resize.min.js"></script>
 
+<!-- Extend Quill's Image Format -->
 <script>
+    const Image = Quill.import('formats/image');
+  
+    class ImageFormat extends Image {
+      static formats(domNode) {
+        let formats = super.formats(domNode);
+        formats.width = domNode.getAttribute('width') || domNode.style.width;
+        formats.height = domNode.getAttribute('height') || domNode.style.height;
+        return formats;
+      }
+  
+      format(name, value) {
+        if (name === 'width' || name === 'height') {
+          if (value) {
+            this.domNode.setAttribute(name, value);
+            this.domNode.style[name] = value;
+          } else {
+            this.domNode.removeAttribute(name);
+            this.domNode.style[name] = '';
+          }
+        } else {
+          super.format(name, value);
+        }
+      }
+    }
+  
+    Quill.register(ImageFormat, true);
+  </script>
+  
+  <!-- Quill Initialization -->
+  <script>
     document.addEventListener("DOMContentLoaded", function() {
-        var quill = new Quill('#event_description_editor', {
-            theme: 'snow',
-            modules: {
-                toolbar: [
-                    [{ 'header': [1, 2, false] }],
-                    ['bold', 'italic', 'underline'],
-                    ['link', 'image'],
-                    [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-                ],
-                imageResize: {}
+      var quill = new Quill('#event_description_editor', {
+        theme: 'snow',
+        modules: {
+          toolbar: [
+            [{ 'header': [1, 2, false] }],
+            ['bold', 'italic', 'underline'],
+            ['link', 'image'],
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
+          ],
+          imageResize: {}
+        }
+      });
+  
+      quill.on('text-change', function(delta, oldDelta, source) {
+        if (source === 'user') {
+          delta.ops.forEach(function(op) {
+            if (op.insert && op.insert.image) {
+              var range = quill.getSelection();
+              if (range) {
+                var [leaf, offset] = quill.getLeaf(range.index);
+                if (leaf && leaf.domNode && leaf.domNode.tagName === 'IMG') {
+                  if (!leaf.domNode.getAttribute('width')) {
+                    leaf.domNode.setAttribute('width', '600');
+                    leaf.domNode.setAttribute('height', 'auto');
+                  }
+                }
+              }
             }
+          });
+        }
+      });
+  
+      document.getElementById('event_form').addEventListener('submit', function(event) {
+        prepareFormSubmission();
+        document.querySelector('input[name="event_description"]').value = quill.root.innerHTML;
+      });
+  
+      function prepareFormSubmission() {
+        var editorContent = quill.root.innerHTML;
+        var tempDiv = document.createElement('div');
+        tempDiv.innerHTML = editorContent;
+  
+        var images = tempDiv.querySelectorAll('img');
+        images.forEach(function(img) {
+          if (!img.getAttribute('width')) {
+            img.setAttribute('width', '600');
+            img.setAttribute('height', 'auto');
+          }
+          img.removeAttribute('style'); // Remove any inline styles
         });
-
-        document.getElementById('event_form').addEventListener('submit', function(event) {
-            document.querySelector('input[name="event_description"]').value = quill.root.innerHTML;
-        });
+  
+        document.querySelector('#event_description').value = tempDiv.innerHTML;
+      }
     });
-</script>
+
+    // JavaScript for modal display functionality
+    const modal = document.getElementById('eventModal');
+    const closeModal = document.getElementById('closeModal');
+
+    // Function to open the modal
+    function openModal() {
+        modal.style.display = 'flex';
+    }
+
+    // Function to close the modal when the close icon is clicked
+    closeModal.onclick = () => {
+        modal.style.display = 'none';
+    }
+
+    // Close the modal if the user clicks outside of the modal content
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+    document.getElementById("closeModal").onclick = function() {
+    document.getElementById("eventModal").style.display = "none";
+    } 
+      // Check if the 'show_modal' query parameter is in the URL
+      window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('show_modal') === 'True') {
+            // Show the modal if the 'show_modal' parameter is True
+            document.getElementById('eventModal').style.display = 'flex';
+        }
+    }
+
+    // Function to close the modal
+    document.getElementById('closeModal').onclick = function() {
+        document.getElementById('eventModal').style.display = 'flex';
+    }
+
+  </script>
 
 </body>
 </html>

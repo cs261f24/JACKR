@@ -100,12 +100,21 @@
             margin-top: 10px;
             color: #666;
         }
+        .logo-image {
+            float: left;   /* Moves image to the left */
+            margin-right: 15px; /* Adds space between the image and content */
+            margin-top: -80px;     /* Moves the image up by 5 pixels; adjust as needed */
+            margin-left: 5px;       /* Moves the image right by 5 pixels; adjust as needed */
+            width: 375px;    /* Adjust the size as needed */
+            height: 100px;
+        }
     </style>
 </head>
 <body>
 
 <header>
     <h1>CS Department</h1>
+    <img src="{{ url_for('static', filename='Images/XavierLogo.png') }}" alt="Xavier Logo" class="logo-image">
     <nav>
         <ul>
             <!-- Add navigation links here if needed -->
@@ -116,7 +125,7 @@
 <main>
     <section id="signup">
         <h2>Signup Page</h2>
-        <h3></h3>
+        <h3>{{info}}</h3>
         <form action="/signup" method="POST">
             <label for="role">Role:</label>
             <select id="role" name="role" required>

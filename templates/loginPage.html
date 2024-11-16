@@ -119,6 +119,14 @@
             color: #e74c3c;
             text-align: center;
         }
+        .logo-image {
+            float: right;   /* Moves image to the right */
+            margin-right: 15px; /* Adds space between the image and content */
+            margin-top: -5px;     /* Moves the image up by 5 pixels; adjust as needed */
+            margin-left: 600px;       /* Moves the image right by 5 pixels; adjust as needed */
+            width: 375px;    /* Adjust the size as needed */
+            height: 100px;
+        }
 
     </style>
 </head>
@@ -126,6 +134,7 @@
 
 <header>
     <h1>CS Department</h1>
+    <img src="{{ url_for('static', filename='Images/XavierLogo.png') }}" alt="Xavier Logo" class="logo-image">
     <nav>
         <ul>
             <!-- Add navigation links here if needed -->

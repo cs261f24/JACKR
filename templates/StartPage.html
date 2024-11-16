@@ -107,15 +107,25 @@
         .link-container a:hover {
             text-decoration: underline;
         }
+        .logo-image {
+            float: left;   /* Moves image to the left */
+            margin-right: 15px; /* Adds space between the image and content */
+            margin-top: -70px;     /* Moves the image up by 5 pixels; adjust as needed */
+            margin-left: 5px;       /* Moves the image right by 5 pixels; adjust as needed */
+            width: 375px;    /* Adjust the size as needed */
+            height: 100px;
+        }
     </style>
 </head>
 <body>
 
 <header>
     <h1>Xavier University Events</h1>
+    <img src="{{ url_for('static', filename='Images/XavierLogo.png') }}" alt="Xavier Logo" class="logo-image">
 </header>
 
 <main>
+    <h2>{{info}}</h2>
     <div class="link-container">
         <p class="intro-text">Welcome to our website!</p>
         <form action="/login">

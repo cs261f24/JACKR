@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS Department Event Page &mdash; Student</title>
+    <style>
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
+        body {
+            background: #f7f8fa;
+        }
+
+        header {
+            background: #0c2340;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            text-align: center;
+            margin: 0;
+            font-size: 1.8em;
+        }
+
+        #wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: row;
+        }
+
+        nav {
+            background: #2d62a3;
+            width: 220px;
+            color: #ffffff;
+            padding: 15px;
+        }
+
+        nav h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            flex: 1;
+            padding: 20px;
+            background: #ffffff;
+            box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            margin: 15px;
+        }
+
+        h2 {
+            text-align: center;
+            margin: 15px 0;
+            color: #2d62a3;
+        }
+
+        #calendar {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            max-width: 450px;
+            margin: 0 auto;
+            background: #dadada;
+        }
+
+        #header {
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #0c2340;
+        }
+
+        #prev, #next {
+            cursor: pointer;
+            color: #2d62a3;
+            font-size: 1.5em;
+        }
+
+        #daysOfWeek, #days {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        #daysOfWeek .day, #days .day {
+            flex: 1 0 14.28%;
+            text-align: center;
+            padding: 10px;
+            font-weight: bold;
+            color: #666;
+        }
+
+        #days .day {
+            cursor: pointer;
+            padding: 15px;
+            border-radius: 4px;
+            background: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: background 0.2s;
+        }
+
+        #days .day:hover {
+            background: #e0e7ff;
+        }
+
+        .empty {
+            background: transparent;
+            cursor: default;
+            box-shadow: none;
+        }
+
+        #events-section {
+            margin-top: 30px;
+        }
+
+        #events-section h1 {
+            color: #2d62a3;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        #events-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        #events-section li {
+            background: #f1f4f8;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #events-section li strong {
+            color: #333;
+        }
+
+        #logout-btn {
+            float: right;
+            background: #2d62a3;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        #logout-btn:hover {
+            background: #0c2340;
+        }
+
+        /* Modal Styles */
+        #eventModal {
+            display: none; /* Modal hidden by default */
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Background overlay */
+            align-items: center;
+            justify-content: center;
+        }
+
+        #modalContent {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+        }
+
+        #closeModal {
+            float: right;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #333;
+        }
+
+        /* Input and button styling */
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            background-color: #2d62a3;
+        }
+
+        #filler {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            background-color: #2d62a3;
+        }
+
+        button:hover {
+            background-color: #0c2340;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CS Department Event Page: Student</h1>
+    <button id="logout-btn" onclick="window.location.href='/logout'">Logout</button>
+</header>
+
+<div id="wrapper">
+    <nav>
+        <h3>Tabs</h3>
+        <ul>
+            <li><button onclick="window.location.href='/my_activities4faculty'"><strong>My Activities</strong></button></li>
+            <li><button onclick="openModal()"><strong>Suggest an Event</strong></button></li>
+            <li><button onclick="window.location.href='/faculty'"><strong>Back to Faculty</strong></button></li>
+        </ul>
+    </nav>
+
+    <main>
+        {% if info1 %}
+        <h2><div id="filler">{{ info1 }}</div></h2>
+        {% endif %}
+        <h2>{{ info }}</h2>
+        <h2>Event Calendar</h2>
+        <div id="calendar">
+            <div id="header">
+                <span id="prev">&#10094;</span>
+                <span id="monthYear"></span>
+                <span id="next">&#10095;</span>
+            </div>
+            <div id="daysOfWeek">
+                <div class="day">Sun</div>
+                <div class="day">Mon</div>
+                <div class="day">Tue</div>
+                <div class="day">Wed</div>
+                <div class="day">Thu</div>
+                <div class="day">Fri</div>
+                <div class="day">Sat</div>
+            </div>
+            <div id="days"></div>
+        </div>
+
+        <div id="events-section">
+            <h1>Events on Selected Date</h1>
+            {% if events %}
+                <ul>
+                    {% for event in events %}
+                        <li>
+                            <strong>{{ event[0] }}</strong><br>
+                            Date: {{ event[1] }}<br>
+                            Description: {{ event[2]|safe}}<br>
+                            Location: {{ event[3] }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No events scheduled for this date. Please select another date.</p>
+            {% endif %}
+        </div>
+
+        <div id="eventModal">
+            <div id="modalContent">
+                <!-- Close button for the modal -->
+                <span id="closeModal">&times;</span>
+                <h2>Suggest an Event</h2>
+                <!-- Form for suggesting an event, sends data to /suggest_event -->
+                <form action="/student_dashboard4faculty" method="POST">
+                    <label for="eventname">Event Name:</label>
+                    <input type="text" id="eventname" name="eventname" required>
+                    <label for="eventdescription">Event Description:</label>
+                    <textarea id="eventdescription" name="eventdescription" rows="4" required></textarea>
+
+                    <!-- Submit button for the form -->
+                    <button type="submit">Submit Suggestion</button>
+                </form>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script>
+    const monthYear = document.getElementById('monthYear');
+    const days = document.getElementById('days');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    let currentDate = new Date();
+
+    function renderCalendar() {
+        const month = currentDate.getMonth();
+        const year = currentDate.getFullYear();
+        days.innerHTML = '';
+        monthYear.innerText = `${currentDate.toLocaleString('default', { month: 'long' })} ${year}`;
+
+        const firstDay = new Date(year, month, 1).getDay();
+        const lastDate = new Date(year, month + 1, 0).getDate();
+
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.classList.add('day', 'empty');
+            days.appendChild(emptyDiv);
+        }
+
+        for (let date = 1; date <= lastDate; date++) {
+            const dayDiv = document.createElement('div');
+            dayDiv.classList.add('day');
+            dayDiv.innerText = date;
+            dayDiv.onclick = () => {
+                const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
+                window.location.href = `/studentview4faculty?date=${selectedDate}`;
+            };
+            days.appendChild(dayDiv);
+        }
+
+        const lastDay = new Date(year, month, lastDate).getDay();
+        for (let i = lastDay + 1; i < 7; i++) {
+            const emptyDiv = document.createElement('div');
+            emptyDiv.classList.add('day', 'empty');
+            days.appendChild(emptyDiv);
+        }
+    }
+
+    prev.onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar();
+    };
+
+    next.onclick = () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar();
+    };
+
+    renderCalendar();
+
+
+    // JavaScript for modal display functionality
+    const modal = document.getElementById('eventModal');
+    const closeModal = document.getElementById('closeModal');
+
+    // Function to open the modal
+    function openModal() {
+        modal.style.display = 'flex';
+    }
+
+    // Function to close the modal when the close icon is clicked
+    closeModal.onclick = () => {
+        modal.style.display = 'none';
+    }
+
+    // Close the modal if the user clicks outside of the modal content
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
+
+</body>
+</html>
