@@ -10,11 +10,11 @@ VALUES ('Carter', 'Smart', 'ab213', 'carter@example.com', 'student'),
 
 
 -- populates the events table (stores details of the events students can attend)
-INSERT INTO events (name, description, date, location)
-VALUES ('Computer Science Club Meeting', 'Monthly meeting', '2024-10-10', 'CS LAB'),
-       ('Cyber Defense Meeting', 'NCL', '2024-10-11', 'Hailstones 15'),
-       ('Gary Windows Event', 'Windows 11 installation', '2024-10-12', 'CS LAB'),
-       ('Girl Scout CS event', 'Teach girl scouts', '2024-10-13', 'Hub 102');
+INSERT INTO events (name, description, date, location,time)
+VALUES ('Computer Science Club Meeting', 'Monthly meeting', '2024-10-10', 'CS LAB', '1:00 PM'),
+       ('Cyber Defense Meeting', 'NCL', '2024-10-11', 'Hailstones 15', '5:00 PM'),
+       ('Gary Windows Event', 'Windows 11 installation', '2024-10-12', 'CS LAB', '10:00 AM'),
+       ('Girl Scout CS event', 'Teach girl scouts', '2024-10-13', 'Hub 102', '6:30 PM');
 
 
 -- populates the attendance table (records which students attended which events)
