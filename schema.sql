@@ -33,7 +33,8 @@ CREATE TABLE events (
     name TEXT UNIQUE NOT NULL,
     description TEXT,
     date TEXT NOT NULL,
-    location TEXT
+    location TEXT,
+    time TEXT NOT NULL
 );
 
 -- Attendance Table: Records attendance for events
@@ -48,10 +49,11 @@ CREATE TABLE attendance (
 );
 
 
-CREATE TABLE suggestion (
+CREATE TABLE IF NOT EXISTS suggestion (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eventname TEXT NOT NULL,
-    eventdescription TEXT
+    eventdescription TEXT,
+    UNIQUE(eventname)
 );
 /* Departments Table: Stores information about various departments
 * id: Unique identifier for each department
@@ -65,6 +67,7 @@ CREATE TABLE suggestion (
     description TEXT,
     head TEXT,
 );
+
 
 
 
