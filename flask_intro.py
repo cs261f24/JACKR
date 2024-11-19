@@ -12,7 +12,7 @@ from flask import request, redirect, url_for, flash, session # Used for login fu
 import click
 from test_db import connect_db # importing the database data insertion into flask
 from werkzeug.security import generate_password_hash, check_password_hash
-
+from datetime import datetime
 
 
 
@@ -142,6 +142,13 @@ def add_events():
         event_date = request.form['event_date']
         event_location = request.form['event_location']
         event_description = request.form['event_description']
+        event_time = request.form['event_time']
+
+        try:
+            event_time_obj = datetime.strptime(event_time, "%H:%M")
+            event_time_12hr = event_time_obj.strftime("%I:%M %p")
+        except ValueError:
+            event_time_12hr = event_time
 
         conn = get_db()  # Get database connection
         cur = conn.cursor()
@@ -154,8 +161,8 @@ def add_events():
         # Insert the new event into the database
         try:
             cur.execute(
-                'INSERT INTO events (name, date, location, description) VALUES (?, ?, ?, ?)',
-                (event_name, event_date, event_location, event_description)
+                'INSERT INTO events (name, date, location, description, time) VALUES (?, ?, ?, ?, ?)',
+                (event_name, event_date, event_location, event_description, event_time_12hr)
             )
             conn.commit()  # Save the changes
             info_message = "Event added successfully!"
@@ -165,7 +172,7 @@ def add_events():
             conn.close()  # Close the connection
 
         # Redirect to the FacultyEventPage with a success message
-        return render_template('FacultyEventPage.html', info=info_message, suggestion=suggestion)
+        return render_template('FacultyEventPage.html', info=info_message, suggestion=suggestion, event_time=event_time_12hr)
 
     # Render the FacultyEventPage if it's a GET request
     return render_template('FacultyEventPage.html', suggestion=suggestion)
@@ -182,7 +189,7 @@ def login():
 
 
         # Fetch the events from the database  
-        cur.execute("SELECT name, date, description, location FROM events ORDER BY date")
+        cur.execute("SELECT name, date, description, location, time FROM events ORDER BY date")
         event = cur.fetchall()
 
         # Fetch the user from the database
@@ -238,7 +245,7 @@ def student_view_4faculty():
     
     events = []
     if selected_date:
-        cursor.execute("SELECT name, date, description, location FROM events WHERE date = ?", (selected_date,))
+        cursor.execute("SELECT name, date, description, location, time FROM events WHERE date = ?", (selected_date,))
         events = cursor.fetchall()
     
     conn.close()
@@ -257,7 +264,7 @@ def student_view():
     
     events = []
     if selected_date:
-        cursor.execute("SELECT name, date, description, location FROM events WHERE date = ?", (selected_date,))
+        cursor.execute("SELECT name, date, description, location, time FROM events WHERE date = ?", (selected_date,))
         events = cursor.fetchall()
     
     conn.close()
@@ -422,4 +429,3 @@ def print_report():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
