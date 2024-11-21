@@ -259,7 +259,7 @@
     <nav>
         <h3>Tabs</h3>
         <ul>
-            <li><button onclick="window.location.href='/my_activities'"><strong>My Activities</strong></button></li>
+            <li><button onclick="window.location.href='/my_activities4faculty'"><strong>My Activities</strong></button></li>
             <li><button onclick="openModal()"><strong>Suggest an Event</strong></button></li>
         </ul>
     </nav>
@@ -296,8 +296,9 @@
                         <li>
                             <strong>{{ event[0] }}</strong><br>
                             Date: {{ event[1] }}<br>
+                            Location: {{ event[3] }}<br>
+                            Time: {{ event[4] }} <br>
                             Description: {{ event[2]|safe}}<br>
-                            Location: {{ event[3] }}
                         </li>
                     {% endfor %}
                 </ul>
@@ -312,7 +313,7 @@
                 <span id="closeModal">&times;</span>
                 <h2>Suggest an Event</h2>
                 <!-- Form for suggesting an event, sends data to /suggest_event -->
-                <form action="/student_dashboard" method="POST">
+                <form action="/student_dashboard4faculty" method="POST">
                     <label for="eventname">Event Name:</label>
                     <input type="text" id="eventname" name="eventname" required>
                     <label for="eventdescription">Event Description:</label>
@@ -354,7 +355,7 @@
             dayDiv.innerText = date;
             dayDiv.onclick = () => {
                 const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
-                window.location.href = `/studentview?date=${selectedDate}`;
+                window.location.href = `/studentview4faculty?date=${selectedDate}`;
             };
             days.appendChild(dayDiv);
         }
