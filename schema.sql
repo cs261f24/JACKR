@@ -40,20 +40,18 @@ CREATE TABLE events (
 -- Attendance Table: Records attendance for events
 CREATE TABLE attendance (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER NOT NULL,
+    email TEXT NOT NULL,
+    name TEXT NOT NULL,
     event_id INTEGER NOT NULL,
-    attended_on TEXT NOT NULL,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (event_id) REFERENCES events(id),
-    UNIQUE(user_id, event_id)
+    events_attended BOOLEAN DEFAULT 0,
+    FOREIGN KEY (event_id) REFERENCES events (id)
 );
 
 
-CREATE TABLE IF NOT EXISTS suggestion (
+CREATE TABLE suggestion (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     eventname TEXT NOT NULL,
-    eventdescription TEXT,
-    UNIQUE(eventname)
+    eventdescription TEXT
 );
 /* Departments Table: Stores information about various departments
 * id: Unique identifier for each department
@@ -67,7 +65,6 @@ CREATE TABLE IF NOT EXISTS suggestion (
     description TEXT,
     head TEXT,
 );
-
 
 
 

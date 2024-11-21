@@ -416,14 +416,24 @@ def logout():
     
     return render_template("StartPage.html")
 
-@app.route('/my_students')
-def my_students():
-    return render_template('MyStudents.html')
-
 @app.route('/print_report')
 def print_report():
         return render_template('PrintReport.html')
 
+@app.route('/my_students')
+def my_students():
+    db = get_db()
+    students = db.execute("""
+        SELECT
+            u.firstName || ' ' || u.lastName AS name,
+            u.email,
+            COUNT(a.event_id) AS events_attended
+        FROM users u
+        LEFT JOIN attendance a ON u.email = a.email
+        WHERE u.role = 'student'
+        GROUP BY u.email
+    """).fetchall()
+    return render_template('MyStudents.html', students=students)
 
 
 

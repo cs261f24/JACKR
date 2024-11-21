@@ -10,20 +10,17 @@ VALUES ('Carter', 'Smart', 'ab213', 'carter@example.com', 'student'),
 
 
 -- populates the events table (stores details of the events students can attend)
-INSERT INTO events (name, description, date, location,time)
+INSERT INTO events (name, description, date, location, time)
 VALUES ('Computer Science Club Meeting', 'Monthly meeting', '2024-10-10', 'CS LAB', '1:00 PM'),
        ('Cyber Defense Meeting', 'NCL', '2024-10-11', 'Hailstones 15', '5:00 PM'),
        ('Gary Windows Event', 'Windows 11 installation', '2024-10-12', 'CS LAB', '10:00 AM'),
        ('Girl Scout CS event', 'Teach girl scouts', '2024-10-13', 'Hub 102', '6:30 PM');
 
 
+
 -- populates the attendance table (records which students attended which events)
-INSERT INTO attendance (user_id, event_id, attended_on)
-VALUES (1, 1, '2024-10-10'),
-       (1, 2, '2024-10-11'),
-       (1, 3, '2024-10-11'),
-       (1, 4, '2024-10-11'),
-       (1, 5, '2024-10-11');
+INSERT INTO attendance (email, name, events_attended)
+VALUES ('nathan@example.com', 'Nathan', 1);
 
 -- populates the suggestion table (stores details of the events students request to faculty)
 INSERT INTO suggestion (eventname, eventdescription)
