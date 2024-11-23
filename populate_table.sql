@@ -19,8 +19,8 @@ VALUES ('Computer Science Club Meeting', 'Monthly meeting', '2024-10-10', 'CS LA
 
 
 -- populates the attendance table (records which students attended which events)
-INSERT INTO attendance (email, name, events_attended)
-VALUES ('nathan@example.com', 'Nathan', 1);
+INSERT INTO attendance (email, name, event_id, events_attended)
+VALUES ('nathan@example.com', 'Nathan', 2, 1);
 
 -- populates the suggestion table (stores details of the events students request to faculty)
 INSERT INTO suggestion (eventname, eventdescription)

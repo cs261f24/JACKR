@@ -234,6 +234,44 @@ def items():
     return render_template('StartPage.html', items=get_logininfo())
 
 
+@app.route('/mark_attendance/<int:event_id>', methods=['POST'])
+def mark_attendance(event_id):
+    if 'email' not in session:
+        # Redirect if not logged in
+        return redirect(url_for('login'))
+    
+    student_email = session['email']  # Assuming the student's email is stored in session
+    
+    # Get the student's full name from the users table
+    db = get_db()
+    student = db.execute("""
+        SELECT firstName, lastName FROM users WHERE email = ?
+    """, (student_email,)).fetchone()
+    
+    if student:
+        student_name = f"{student['firstName']} {student['lastName']}"
+    else:
+        student_name = "Unknown"  # In case the student is not found (shouldn't happen if they are logged in)
+    
+    # Insert attendance if not already present
+    db.execute("""
+        INSERT OR IGNORE INTO attendance (email, name, event_id, events_attended)
+        VALUES (?, ?, ?, 1)
+    """, (student_email, student_name, event_id))
+    
+    # Alternatively, update if already attended
+    db.execute("""
+        UPDATE attendance
+        SET events_attended = 1
+        WHERE email = ? AND event_id = ?
+    """, (student_email, event_id))
+    
+    db.commit()
+
+    # Redirect to the student's dashboard or back to the event view
+    return render_template('StudentView.html', info1="Your attendance has been recorded!")  # Redirect back to the student dashboard
+
+
 @app.route('/studentview4faculty')
 def student_view_4faculty():
     # Retrieve the selected date from the query parameter
@@ -264,9 +302,23 @@ def student_view():
     
     events = []
     if selected_date:
-        cursor.execute("SELECT name, date, description, location, time FROM events WHERE date = ?", (selected_date,))
-        events = cursor.fetchall()
+    # Query to get event details along with attendance information
+        cursor.execute("""
+        SELECT 
+            e.id, 
+            e.name, 
+            e.date, 
+            e.description, 
+            e.location, 
+            e.time,
+            COALESCE(a.events_attended, 0) AS events_attended
+        FROM events e
+        LEFT JOIN attendance a ON e.id = a.event_id AND a.email = ?
+        WHERE e.date = ?
+        """, (session['email'], selected_date))
     
+        events = cursor.fetchall()
+
     conn.close()
     
     # Render `studentview.html`, passing the events for the selected date
@@ -423,8 +475,9 @@ def print_report():
 @app.route('/my_students')
 def my_students():
     db = get_db()
+    # Query to get students' attendance summary
     students = db.execute("""
-        SELECT
+        SELECT 
             u.firstName || ' ' || u.lastName AS name,
             u.email,
             COUNT(a.event_id) AS events_attended
@@ -432,7 +485,9 @@ def my_students():
         LEFT JOIN attendance a ON u.email = a.email
         WHERE u.role = 'student'
         GROUP BY u.email
+        ORDER BY name ASC
     """).fetchall()
+
     return render_template('MyStudents.html', students=students)
 
 

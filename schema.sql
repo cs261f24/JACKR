@@ -44,7 +44,8 @@ CREATE TABLE attendance (
     name TEXT NOT NULL,
     event_id INTEGER NOT NULL,
     events_attended BOOLEAN DEFAULT 0,
-    FOREIGN KEY (event_id) REFERENCES events (id)
+    FOREIGN KEY (event_id) REFERENCES events (id),
+    UNIQUE (email, event_id) -- Ensure uniqueness for each user-event pair
 );
 
 
