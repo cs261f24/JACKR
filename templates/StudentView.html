@@ -235,6 +235,7 @@
             background-color: #2d62a3;
         }
 
+
         #filler {
             padding: 10px 20px;
             border: none;
@@ -288,24 +289,33 @@
             <div id="days"></div>
         </div>
 
-        <div id="events-section">
-            <h1>Events on Selected Date</h1>
-            {% if events %}
-                <ul>
-                    {% for event in events %}
-                        <li>
-                            <strong>{{ event[0] }}</strong><br>
-                            Date: {{ event[1] }}<br>
-                            Location: {{ event[3] }}<br>
-                            Time: {{ event[4] }} <br>
-                            Description: {{ event[2]|safe}}<br>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>No events scheduled for this date. Please select another date.</p>
-            {% endif %}
-        </div>
+    <div id="events-section">
+        <h1>Events on Selected Date</h1>
+    {% if events %}
+        <ul>
+            {% for event in events %}
+                <li>
+                    <strong>{{ event[1] }}</strong><br>
+                    Date: {{ event[2] }}<br>
+                    Location: {{ event[4] }}<br>
+                    Time: {{ event[5] }}<br>
+                    Description: {{ event[3]|safe }}<br>
+                    {% if event[6] == 1 %}
+                    <button disabled style="background-color: #ccc; color: #666; border: none; padding: 10px 20px; border-radius: 4px; cursor: not-allowed;">
+                        Attendance Marked
+                    </button>
+                    {% else %}
+                        <form method="POST" action="{{ url_for('mark_attendance', event_id=event[0]) }}">
+                            <button type="submit">Mark Attendance</button>
+                        </form>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No events scheduled for this date. Please select another date.</p>
+    {% endif %}
+    </div>
 
         <div id="eventModal">
             <div id="modalContent">
@@ -355,7 +365,7 @@
             dayDiv.innerText = date;
             dayDiv.onclick = () => {
                 const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
-                window.location.href = `/studentview4faculty?date=${selectedDate}`;
+                window.location.href = `/studentview?date=${selectedDate}`;
             };
             days.appendChild(dayDiv);
         }

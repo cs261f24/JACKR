@@ -147,6 +147,19 @@
 
             <button type="submit">Signup</button>
         </form>
+        <!-- Back to Home Button -->
+    <form action="{{ url_for('logout') }}" method="get" style="position: absolute; top: 20px; right: 40px;">
+        <button type="submit" style="
+            padding: 6px 12px;
+            background-color: #0c2340e2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.3s ease;">
+            Back Home
+        </button>
     </section>
 </main>
 
