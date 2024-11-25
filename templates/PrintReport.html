@@ -3,59 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Print Report</title>
+    <title>Semester Event Summary</title>
     <style>
+        /* General styles */
+        @import url('https://fonts.cdnfonts.com/css/pp-neue-montreal');
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'PP Neue Montreal', sans-serif;
+        }
+
         body {
-            background: #f0f0f0;
-            font-family: Arial, sans-serif;
-            padding: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            padding: 0;
         }
 
         h1 {
             text-align: center;
-            color: #333;
+            color: #0c2340;
+            font-size: 2rem;
+            margin-top: 30px;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 40px auto;
             padding: 20px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #0c2340e2;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .button, .print-btn {
+            display: block;
+            width: 200px;
+            padding: 12px;
+            text-align: center;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin: 20px auto;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            background-color: #4CAF50;
+            background-color: #0c2340e2;
             color: white;
-            text-align: center;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 16px;
         }
 
         .button:hover {
-            background-color: #45a049;
+            background-color: #255793;
+        }
+
+        .print-btn {
+            background-color: #0c2340e2;
+            color: white;
+            text-decoration: none;
+        }
+
+        .print-btn:hover {
+            background-color: #255793;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Print Event Reports</h1>
-    <p>Select the type of report you would like to print:</p>
+    <h1>Semester Event Summary</h1>
 
-    <ul>
-        <li>Attendance Report</li>
-        <li>Event Summary Report</li>
-        <li>Detailed Event Report</li>
-    </ul>
+    <table>
+        <tr>
+            <th>Event Name</th>
+            <th>Date</th>
+            <th>Attendees</th>
+            <th>Event Popularity</th>
+        </tr>
+        <tr>
+            <td>Welcome Week</a></td>
+            <td>September 5, 2024</td>
+            <td>150</td>
+            <td>High</td>
+        </tr>
+        <tr>
+            <td>Career Fair</a></td>
+            <td>September 20, 2024</td>
+            <td>120</td>
+            <td>Medium</td>
+        </tr>
+        <tr>
+            <td>Networking Night</a></td>
+            <td>October 15, 2024</td>
+            <td>75</td>
+            <td>Low</td>
+        </tr>
+        <!-- Add more events as needed -->
+    </table>
 
-    <a href="#" class="button">Print Report</a>
     <a href="/faculty" class="button">Back to Faculty Page</a>
+    
+    <!-- Print button -->
+    <a href="javascript:void(0);" class="print-btn" onclick="window.print();">Print Page</a>
 </div>
 
 </body>
