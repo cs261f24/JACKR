@@ -119,7 +119,9 @@
         }
 
         form input[type="text"],
+        form input[type="time"],
         form input[type="date"],
+        form input[type="time"],
         #event_description_editor {
             width: 100%;
             padding: 10px;
@@ -187,7 +189,9 @@
         <h3>Tabs</h3>
         <ul>
             <li><a href="/my_students">My Students</a></li>
-            <li><a href="/studentview">Student View</a></li>
+            <li><a href="/print_report">Semester Report</a></li>
+            <li><a href="/event_suggestions">Event Suggestions</a></li>
+            <li><a href="/student_dashboard4faculty">Student View</a></li>
         </ul>
     </nav>
 
@@ -200,6 +204,9 @@
 
                 <label for="event_date">Event Date:</label>
                 <input type="date" id="event_date" name="event_date" required>
+
+                <label for="event_time">Event Time:</label>
+                <input type="time" id="event_time" name="event_time" value="{{ event_time_12hr }}" required>
 
                 <label for="event_location">Location:</label>
                 <input type="text" id="event_location" name="event_location">
@@ -306,6 +313,7 @@
       }
     });
   </script>
+
 
 </body>
 </html>
