@@ -217,8 +217,7 @@ def login():
             else:
                 return render_template("StudentView.html", info = "Hello " + firstName + "!")  # Redirect to student view
         else:
-            flash('Invalid email or password', 'error')
-            return render_template('loginPage.html')
+            return render_template('loginPage.html', info = "Invalid email or password.")
     return render_template('loginPage.html')
 
            
