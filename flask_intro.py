@@ -240,7 +240,7 @@ def mark_attendance(event_id):
         # Redirect if not logged in
         return redirect(url_for('login'))
     
-    student_email = session['email']  # Assuming the student's email is stored in session
+    student_email = session['email']
     
     # Get the student's full name from the users table
     db = get_db()
@@ -251,25 +251,29 @@ def mark_attendance(event_id):
     if student:
         student_name = f"{student['firstName']} {student['lastName']}"
     else:
-        student_name = "Unknown"  # In case the student is not found (shouldn't happen if they are logged in)
+        student_name = "Unknown"
     
-    # Insert attendance if not already present
+    # Insert or update attendance
     db.execute("""
-        INSERT OR IGNORE INTO attendance (email, name, event_id, events_attended)
+        INSERT OR REPLACE INTO attendance (email, name, event_id, events_attended)
         VALUES (?, ?, ?, 1)
     """, (student_email, student_name, event_id))
     
-    # Alternatively, update if already attended
-    db.execute("""
-        UPDATE attendance
-        SET events_attended = 1
-        WHERE email = ? AND event_id = ?
-    """, (student_email, event_id))
-    
     db.commit()
 
-    # Redirect to the student's dashboard or back to the event view
-    return render_template('StudentView.html', info1="Your attendance has been recorded!")  # Redirect back to the student dashboard
+    # Fetch the event date to redirect back to the same date
+    event = db.execute("SELECT date FROM events WHERE id = ?", (event_id,)).fetchone()
+    if event:
+        event_date = event['date']
+    else:
+        event_date = None
+
+    # Redirect back to the student view with the date parameter
+    if event_date:
+        return redirect(url_for('student_view', date=event_date))
+    else:
+        return redirect(url_for('student_view'))
+
 
 
 @app.route('/studentview4faculty')
