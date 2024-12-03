@@ -32,7 +32,7 @@ def test_student_signup(setup):
     
     # Click the "Sign Up" button on the start page using the button's form action
     driver.find_element(By.XPATH, "//form[@action='/signup']/button").click()
-    
+     
     # Wait for the signup page to load
     time.sleep(2)
     

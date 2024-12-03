@@ -436,7 +436,7 @@ def back_to_student_for_faculty():
         finally:
             conn.close()  # Close connection
 
-    return render_template("StudentViewForFaculty.html", event=event, info1=info1)
+    return render_template("StudentViewforFaculty.html", event=event, info1=info1)
 
 
 @app.route('/delete_event/<event_name>', methods=['POST'])
