@@ -399,7 +399,7 @@
             // Event handler for clicking a day
             dayDiv.onclick = () => {
                 const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
-                window.location.href = `/studentview?date=${selectedDate}`;
+                window.location.href = `/studentview4faculty?date=${selectedDate}`;
             };
 
             days.appendChild(dayDiv);
