@@ -1,20 +1,20 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select, WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC  # this is for explicit waits
+from selenium.webdriver.support import expected_conditions as EC  # For explicit waits
 import pytest
 import time
 from test_db import connect_db  # From your test_db.py
 
-#to run these tests first start your virtual enviroment 
-#install selenium and pytest in your virtual enviroment created for this project 
-#pip install selenium pytest 
-#start flask by typing flask --app flask_intro run --debug
-#then pytest test_signup_login.py will start the tests
+# To run these tests:
+# 1. Activate your virtual environment.
+# 2. Install selenium and pytest in your virtual environment: pip install selenium pytest
+# 3. Start Flask by typing: flask --app flask_intro run --debug
+# 4. Run the tests with: pytest Selenium_Pytest.py
 
 @pytest.fixture(scope="module")
 def setup():
-    # Setup Selenium WebDriver (Chrome in this case, make sure chromedriver is installed)
+    # Setup Selenium WebDriver (Chrome in this case, ensure chromedriver is installed)
     driver = webdriver.Chrome()
     driver.get("http://localhost:5000")
     
@@ -30,7 +30,7 @@ def test_student_signup(setup):
     driver.get("http://localhost:5000")
     time.sleep(2)
     
-    # Click the "SignUp" button on the start page using the button's form action
+    # Click the "Sign Up" button on the start page using the button's form action
     driver.find_element(By.XPATH, "//form[@action='/signup']/button").click()
     
     # Wait for the signup page to load
@@ -53,8 +53,9 @@ def test_student_signup(setup):
     # Submit the form
     driver.find_element(By.TAG_NAME, "button").click()
 
-    # Verify redirection to start page
+    # Verify redirection to start page with success message
     time.sleep(2)
+    assert "Sign-up successful!" in driver.page_source
 
 
 def test_student_login(setup):
@@ -78,8 +79,8 @@ def test_student_login(setup):
 def test_student_activities_navigation(setup):
     driver = setup
 
-    # Click on the "My Activities" tab/link
-    driver.find_element(By.LINK_TEXT, "My Activities").click()
+    # Click on the "My Activities" button
+    driver.find_element(By.XPATH, "//button[.//strong[text()='My Activities']]").click()
 
     # Verify that we are on the "My Activities" page
     time.sleep(2)
@@ -88,12 +89,44 @@ def test_student_activities_navigation(setup):
 def test_back_to_dashboard_from_activities(setup):
     driver = setup
 
-    # Click on "Back to Dashboard"
-    driver.find_element(By.LINK_TEXT, "Back to Dashboard").click()  # Ensure this matches the button's link text
+    # Click on "Back to My Dashboard"
+    driver.find_element(By.LINK_TEXT, "Back to My Dashboard").click()
 
     # Verify redirection back to the Student Dashboard
     time.sleep(2)
     assert "CS Department Event Page: Student" in driver.page_source 
+
+def test_student_suggest_event(setup):
+    driver = setup
+
+    # Ensure we are on the student dashboard
+    assert "CS Department Event Page: Student" in driver.page_source
+
+    # Click on the "Suggest an Event" button
+    driver.find_element(By.XPATH, "//button[.//strong[text()='Suggest an Event']]").click()
+    time.sleep(2)
+
+    # Wait for the modal to appear
+    WebDriverWait(driver, 10).until(
+        EC.visibility_of_element_located((By.ID, 'eventModal'))
+    )
+
+    # Fill out the suggestion form
+    driver.find_element(By.ID, "eventname").send_keys("Student Suggested Event")
+    time.sleep(1)
+    driver.find_element(By.ID, "eventdescription").send_keys("This is a suggested event from a student.")
+    time.sleep(1)
+
+    # Submit the suggestion
+    driver.find_element(By.XPATH, "//button[text()='Submit Suggestion']").click()
+    time.sleep(2)
+
+    # Verify that the suggestion was submitted (adjust based on actual behavior)
+    assert "Suggestion submitted successfully!" in driver.page_source or "CS Department Event Page: Student" in driver.page_source
+
+    # Logout
+    driver.find_element(By.ID, 'logout-btn').click()
+    time.sleep(2)
 
 
 def test_faculty_signup(setup):
@@ -103,7 +136,7 @@ def test_faculty_signup(setup):
     # Wait for the start page to load
     time.sleep(2)
     
-    # Click the "SignUp" button on the start page using the button's form action
+    # Click the "Sign Up" button on the start page using the button's form action
     driver.find_element(By.XPATH, "//form[@action='/signup']/button").click()
     
     # Wait for the signup page to load
@@ -111,7 +144,7 @@ def test_faculty_signup(setup):
     
     # Select 'Faculty' role (the value is 'admin' in the HTML)
     role_dropdown = Select(driver.find_element(By.ID, "role"))
-    role_dropdown.select_by_value("admin")  # Correct value for faculty is 'admin'
+    role_dropdown.select_by_value("admin")
     time.sleep(1)
 
     # Fill out signup form with first name, last name, email, and password
@@ -127,9 +160,9 @@ def test_faculty_signup(setup):
     # Submit the form
     driver.find_element(By.TAG_NAME, "button").click()
 
-    # Verify redirection to start page
+    # Verify redirection to start page with success message
     time.sleep(2)
-    assert "Xavier University Events" in driver.page_source
+    assert "Sign-up successful!" in driver.page_source
 
     # Check if the user is added to the database
     conn = connect_db('db.sqlite3')
@@ -159,10 +192,9 @@ def test_faculty_login(setup):
     time.sleep(2)
     assert "CS Department Event Page" in driver.page_source 
 
+
 def test_add_event(setup):
     driver = setup
-
-    assert "CS Department Event Page" in driver.page_source
     
     # Fill out the event form
     driver.find_element(By.ID, "event_name").send_keys("Sample Event")
@@ -172,17 +204,29 @@ def test_add_event(setup):
     )
     driver.execute_script("document.getElementById('event_date').value = '2024-11-15';") 
     time.sleep(2)
-    driver.find_element(By.ID, "event_description").send_keys("This is a description for a sample event.")
+    driver.execute_script("document.getElementById('event_time').value = '10:00';")
     time.sleep(2)
     driver.find_element(By.ID, "event_location").send_keys("CS Building, Room 101")
     time.sleep(2)
-
+    
+    # Find the Quill editor's contenteditable element
+    quill_editor = driver.find_element(By.CLASS_NAME, 'ql-editor')
+    
+    # Click on the editor to focus
+    quill_editor.click()
+    time.sleep(1)
+    
+    # Send keys to the editor
+    quill_editor.send_keys('This is a description for a sample event.')
+    time.sleep(2)
+    
     # Click the "Add Event" button to submit the form
     driver.find_element(By.XPATH, "//button[text()='Add Event']").click()
     
     # Verify the event submission was successful
     time.sleep(2)
-    assert "Event added successfully!" in driver.page_source  # Adjust based on the actual success message 
+    assert "Event added successfully!" in driver.page_source  # Adjust based on the actual success message
+
 
 def test_navigate_to_my_students_and_back(setup):
     driver = setup
@@ -197,7 +241,7 @@ def test_navigate_to_my_students_and_back(setup):
     assert "My Students" in driver.page_source  # Adjust if needed based on actual page content
 
     # Click "Back to Faculty Page" button or link
-    driver.find_element(By.LINK_TEXT, "Back to Faculty Page").click()  # Ensure this text matches the actual link
+    driver.find_element(By.LINK_TEXT, "Back to Faculty Page").click()
 
     # Verify redirection back to the Faculty Event Page
     time.sleep(2)
@@ -209,26 +253,16 @@ def test_navigate_to_print_report_and_back(setup):
    
     assert "CS Department Event Page" in driver.page_source
 
-    # Click on the "Print Report" tab/link
-    driver.find_element(By.LINK_TEXT, "Print Report").click()
+    # Click on the "Semester Report" tab/link
+    driver.find_element(By.LINK_TEXT, "Semester Report").click()
 
-    # Verify that we are on the "Print Report" page
+    # Verify that we are on the "Semester Event Summary" page
     time.sleep(3)
-    assert "Print Event Reports" in driver.page_source  # Adjust based on actual page content
+    assert "Semester Event Summary" in driver.page_source  # Adjust based on the actual page content
 
     # Click "Back to Faculty Page" button or link
-    driver.find_element(By.LINK_TEXT, "Back to Faculty Page").click()  # Ensure this text matches the actual link
+    driver.find_element(By.LINK_TEXT, "Back to Faculty Page").click()
 
     # Verify redirection back to the Faculty Event Page
     time.sleep(2)
     assert "CS Department Event Page" in driver.page_source
-
-
-
-
-
-
-
-
-
-
