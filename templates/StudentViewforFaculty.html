@@ -341,9 +341,22 @@
     const days = document.getElementById('days');
     const prev = document.getElementById('prev');
     const next = document.getElementById('next');
-    let currentDate = new Date();
 
-    // Sample event data (this will come from the backend, replace with your actual data)
+    function getQueryParam(param) {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get(param);
+    }
+
+    let currentDate;
+
+    const dateParam = getQueryParam('date');
+    if (dateParam) {
+        currentDate = new Date(dateParam);
+    } else {
+        currentDate = new Date();
+    }
+
+    // Sample event data (this should come from your backend)
     const eventDates = [
         '2024-10-10',
         '2024-10-11',
@@ -383,10 +396,10 @@
                 dayDiv.appendChild(dot);
             }
 
-            // Event handler for clicking a day (you can redirect to view events on that date)
+            // Event handler for clicking a day
             dayDiv.onclick = () => {
                 const selectedDate = `${year}-${(month + 1).toString().padStart(2, '0')}-${date.toString().padStart(2, '0')}`;
-                window.location.href = `/studentview4faculty?date=${selectedDate}`;
+                window.location.href = `/studentview?date=${selectedDate}`;
             };
 
             days.appendChild(dayDiv);
@@ -413,7 +426,6 @@
     };
 
     renderCalendar();
-
 
     // JavaScript for modal display functionality
     const modal = document.getElementById('eventModal');
