@@ -289,7 +289,7 @@ def student_view_4faculty():
     conn.close()
     
     # Render `studentviewforfaculty.html`, passing the events for the selected date
-    return render_template('StudentViewForFaculty.html', events=events)
+    return render_template('StudentViewforFaculty.html', events=events)
 
 @app.route('/studentview')
 def student_view():
